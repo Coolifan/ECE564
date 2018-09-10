@@ -2,7 +2,7 @@
 ////  DataModel.swift
 ////  ECE564_HOMEWORK
 ////
-////  Created by Ric Telford on 7/16/17.
+////  Created by Ric Telford on 9/9/18.
 ////  Copyright © 2018 ece564. All rights reserved.
 ////
 //
@@ -112,7 +112,7 @@ func whoIs(_ name: String) -> String {
                 if i != person.bestProgrammingLanguage.count-1 {
                     langStr += "\(person.bestProgrammingLanguage[i]), "
                 } else {
-                    langStr += "and \(person.bestProgrammingLanguage[i])"
+                    langStr += (i != 0) ? "and \(person.bestProgrammingLanguage[i])" : "\(person.bestProgrammingLanguage[i])"
                 }
             }
             
@@ -121,7 +121,7 @@ func whoIs(_ name: String) -> String {
                 if i != person.hobbies.count-1 {
                     hobbyStr += "\(person.hobbies[i]), "
                 } else {
-                    hobbyStr += "and \(person.hobbies[i])"
+                    hobbyStr += (i != 0) ? "and \(person.hobbies[i])" : "\(person.hobbies[i])"
                 }
             }
             

@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  ECE564_HOMEWORK
 //
-//  Created by Ric Telford on 7/16/17.
+//  Created by Yifan Li on 9/9/18.
 //  Copyright © 2018 ece564. All rights reserved.
 //
 
@@ -106,14 +106,16 @@ class ViewController: UIViewController {
     }
 
     @objc func pressedAdd(_ sender: UIButton!) {
-        if firstNameTextView.text == nil || lastNameTextView.text == nil || genderTextView.text == nil || roleTextView.text == nil || fromTextView.text == nil || degreeTextView.text == nil || hobbiesTextView.text == nil || languagesTextView.text == nil {
-            descriptionView.text = "Fill out all the blanks"
-            return
-        }
-        
+    
         let firstName: String = firstNameTextView.text!
         let lastName: String = lastNameTextView.text!
         let from: String = fromTextView.text!
+        if (firstName == "" || lastName == "" || from == "") {
+            descriptionView.text = "Please fill out all the blanks!"
+            descriptionView.textColor = UIColor.red
+            return
+        }
+        
         var gender: Gender = .Male
         if genderTextView.text == "Male" {
             gender = .Male
@@ -122,6 +124,7 @@ class ViewController: UIViewController {
         } else {
             // error handling
             descriptionView.text = "Invalid gender entered."
+            descriptionView.textColor = UIColor.red
             return
         }
         
@@ -135,6 +138,7 @@ class ViewController: UIViewController {
         } else {
             // error handling
             descriptionView.text = "Invalid role entered."
+            descriptionView.textColor = UIColor.red
             return
         }
         
@@ -148,23 +152,40 @@ class ViewController: UIViewController {
             degree = "MENG"
         case "NA":
             degree = "NA"
+        case "":
+            descriptionView.text = "No degree info entered."
+            descriptionView.textColor = UIColor.red
+            return
         default:
             degree = "other"
         }
         
+        if hobbiesTextView.text! == "" {
+            descriptionView.text = "No hobbies entered."
+            descriptionView.textColor = UIColor.red
+            return
+        }
         let hobbies: [String] = hobbiesTextView.text!.components(separatedBy: ", ").filter({$0 != ""})
         if hobbies.count > 3 {
             // error handling
             descriptionView.text = "Up to 3 hobbies!"
+            descriptionView.textColor = UIColor.red
             return
         }
         
+        if languagesTextView.text! == "" {
+            descriptionView.text = "No languages entered."
+            descriptionView.textColor = UIColor.red
+            return
+        }
         let languages: [String] = languagesTextView.text!.components(separatedBy: ", ").filter({$0 != ""})
         if languages.count > 3 {
             //error handling
             descriptionView.text = "Up to 3 languages!"
+            descriptionView.textColor = UIColor.red
             return
         }
+        
         
         let newPerson: DukePerson = DukePerson(firstName: firstName, lastName: lastName, whereFrom: from, gender: gender, degree: degree, bestProgrammingLanguage: languages, hobbies: hobbies, role: role)
         
@@ -172,13 +193,24 @@ class ViewController: UIViewController {
         for i in 0..<roster.count {
             if roster[i].fullName == fullName {
                 roster[i] = newPerson
+                descriptionView.textColor = UIColor.blue
                 descriptionView.text = "\(fullName)'s information has been updated successfully"
                 return
             }
         }
         
         roster.append(newPerson)
+        descriptionView.textColor = UIColor.blue
         descriptionView.text = "\(fullName) has been added to the class successfully."
+        
+        firstNameTextView.text = ""
+        lastNameTextView.text = ""
+        genderTextView.text = ""
+        roleTextView.text = ""
+        degreeTextView.text = ""
+        fromTextView.text = ""
+        hobbiesTextView.text = ""
+        languagesTextView.text = ""
     }
     
     @objc func pressedFind(_ sender: UIButton!) {
@@ -186,6 +218,7 @@ class ViewController: UIViewController {
             // error handling
         } else {
             let fullName: String = firstNameTextView.text! + " " + lastNameTextView.text!
+            descriptionView.textColor = UIColor.blue
             descriptionView.text = whoIs(fullName)
         }
     }
