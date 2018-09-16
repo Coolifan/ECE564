@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         Information = self.view
-        
+        // Add all the subviews
         addLabelView(text: "First: ", x: 10, y: 30, width: 100, height: 30)
         addLabelView(text: "Last: ", x: 10, y: 65, width: 100, height: 30)
         addLabelView(text: "Gender: ", x: 10, y: 100, width: 100, height: 30)
@@ -63,13 +63,19 @@ class ViewController: UIViewController {
         descriptionView.textColor = UIColor.blue
         Information.addSubview(descriptionView)
         
+        // the image displayed at the bottom left corner
         imageView = UIImageView()
         imageView.frame = CGRect(x: 10, y: self.view.bounds.height - 50, width: 200, height: 30)
         imageView.image = UIImage(named: "ECE_Logo.png")
         Information.addSubview(imageView)
         
+        // dismiss the keyboard when tap anywhere
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
     }
     
+    // a function used to quickly add a new UILabel
     func addLabelView(text: String, x: Int, y: Int, width: Int, height: Int) {
         let labelView = UILabel(frame: CGRect(x: x, y: y, width: width, height: height))
         labelView.text = text
@@ -77,6 +83,7 @@ class ViewController: UIViewController {
         Information.addSubview(labelView)
     }
     
+    // a function used to quickly add a new UITextField
     func addTextView(placeholder: String, x: Int, y: Int, width: Int, height: Int) -> UITextField {
         let textView = UITextField(frame: CGRect(x: x, y: y, width: width, height: height))
         textView.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [
@@ -89,6 +96,7 @@ class ViewController: UIViewController {
         return textView
     }
     
+    // a function used to quickly add a new UIButton
     func addButtonView(title: String, x: Int, y: Int, width: Int) -> UIButton {
         let buttonView = UIButton()
         buttonView.backgroundColor = UIColor.gray
@@ -104,9 +112,9 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    @objc func pressedAdd(_ sender: UIButton!) {
     
+    // the actions when add/update button is clicked
+    @objc func pressedAdd(_ sender: UIButton!) {
         let firstName: String = firstNameTextView.text!
         let lastName: String = lastNameTextView.text!
         let from: String = fromTextView.text!
@@ -195,6 +203,14 @@ class ViewController: UIViewController {
                 roster[i] = newPerson
                 descriptionView.textColor = UIColor.blue
                 descriptionView.text = "\(fullName)'s information has been updated successfully"
+                firstNameTextView.text = ""
+                lastNameTextView.text = ""
+                genderTextView.text = ""
+                roleTextView.text = ""
+                degreeTextView.text = ""
+                fromTextView.text = ""
+                hobbiesTextView.text = ""
+                languagesTextView.text = ""
                 return
             }
         }
@@ -213,6 +229,7 @@ class ViewController: UIViewController {
         languagesTextView.text = ""
     }
     
+    // the actions when find button is clicked
     @objc func pressedFind(_ sender: UIButton!) {
         if firstNameTextView.text == nil || lastNameTextView.text == nil {
             // error handling
@@ -220,6 +237,14 @@ class ViewController: UIViewController {
             let fullName: String = firstNameTextView.text! + " " + lastNameTextView.text!
             descriptionView.textColor = UIColor.blue
             descriptionView.text = whoIs(fullName)
+            firstNameTextView.text = ""
+            lastNameTextView.text = ""
+            genderTextView.text = ""
+            roleTextView.text = ""
+            degreeTextView.text = ""
+            fromTextView.text = ""
+            hobbiesTextView.text = ""
+            languagesTextView.text = ""
         }
     }
 
