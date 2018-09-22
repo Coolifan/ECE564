@@ -27,7 +27,15 @@ class InformationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        loadPersonalInformation()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func loadPersonalInformation() {
         self.firstNameTextField.text = person.firstName
         self.lastNameTextField.text = person.lastName
         self.genderTextField.text = person.gender == .Male ? "Male" : "Female"
@@ -47,21 +55,19 @@ class InformationViewController: UIViewController {
         
         // Remember to uncheck "User Interaction Enabled" for UITextFields in storyboard
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (sender as! UIBarButtonItem) == self.editButton {
+            let targetVC = segue.destination as! EditInformationViewController
+            targetVC.personBeingEdited = person
+        } else {
+            return
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func returnFromEditInformationView(segue:UIStoryboardSegue) {
+        loadPersonalInformation()
     }
-    */
+
 
 }
