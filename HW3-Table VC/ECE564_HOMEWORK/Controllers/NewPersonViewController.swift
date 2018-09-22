@@ -21,9 +21,15 @@ class NewPersonViewController: UIViewController {
     @IBOutlet weak var hobbiesTextField: UITextField!
     @IBOutlet weak var languagesTextField: UITextField!
     
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    @IBOutlet weak var warningLabel: UILabel!
+    var errorOccurred: Bool = false
     
+    @IBOutlet weak var addButton: UIButton!
+    @IBAction func addNewPerson(_ sender: Any) {
+        errorOccurred = getPersonalInformation()
+        if errorOccurred == true {
+            return
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,24 +45,31 @@ class NewPersonViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        if (sender as! UIBarButtonItem) != self.addButton { // clicked Cancel button
-            return
-        } else {
-            getPersonalInformation()
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if sender as? UIButton == self.addButton {
+            return errorOccurred ? false : true
         }
+        return true
     }
     
-    
-    
-    func getPersonalInformation() {
-        if self.firstNameTextField.text == nil || self.lastNameTextField.text == nil || self.genderTextField.text == nil || self.fromTextField.text == nil || self.degreeTextField.text == nil || self.roleTextField.text == nil || self.hobbiesTextField.text == nil || self.languagesTextField.text == nil {
-            self.warningLabel.text = "Please fill in all the blanks!"
+    func getPersonalInformation() -> Bool {
+        
+        if (self.firstNameTextField.text?.isEmpty)! || (self.lastNameTextField.text?.isEmpty)! || (self.genderTextField.text?.isEmpty)! || (self.fromTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! {
             
             // alert!
+            displayAlertMessage(title: "ERROR!", message: "All fields are required!")
+            return true
         }
+        
+        for person in self.people {
+            if person.lastName == self.lastNameTextField.text && person.firstName == self.firstNameTextField.text {
+                // alert!
+                displayAlertMessage(title: "ERROR!", message: "\(person.firstName) \(person.lastName) is already in the class!")
+                return true
+            }
+        }
+        
+
         // all the text fields have input
         self.newFace.firstName = self.firstNameTextField.text!
         self.newFace.lastName = self.lastNameTextField.text!
@@ -68,7 +81,9 @@ class NewPersonViewController: UIViewController {
         } else if self.genderTextField.text == "Female" {
             self.newFace.gender = .Female
         } else {
-            // invalid gender
+            // alert!
+            displayAlertMessage(title: "ERROR!", message: "Invalid gender!")
+            return true
         }
         
         if self.roleTextField.text == "Student" {
@@ -78,7 +93,9 @@ class NewPersonViewController: UIViewController {
         } else if self.roleTextField.text == "Professor" {
             self.newFace.role = .Professor
         } else {
-            // invalid role
+            // alert!
+            displayAlertMessage(title: "ERROR!", message: "Invalid role!")
+            return true
         }
         
         switch self.degreeTextField.text {
@@ -92,26 +109,34 @@ class NewPersonViewController: UIViewController {
             self.newFace.degree = "MENG"
         case "NA":
             self.newFace.degree = "NA"
-        case "":
-            return
-        // error
         default:
             self.newFace.degree = "Other"
         }
         
         let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
         if hobbies.count > 3 {
-            // error handling
-            
+            // alert!
+            displayAlertMessage(title: "ERROR!", message: "Up to 3 hobbies!")
+            return true
         }
         self.newFace.hobbies = hobbies
         
         let languages: [String] = languagesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
         if languages.count > 3 {
-            //error handling
+            //alert!
+            displayAlertMessage(title: "ERROR!", message: "Up to 3 languages!")
+            return true
             
         }
         self.newFace.bestProgrammingLanguage = languages
+        
+        return false
+    }
+    
+    func displayAlertMessage(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     

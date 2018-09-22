@@ -100,20 +100,15 @@ class ClassTableViewController: UITableViewController {
     @IBAction func returnFromNewPerson(segue: UIStoryboardSegue) {
         let source: NewPersonViewController = segue.source as! NewPersonViewController
         let who: DukePerson = source.newFace
-        for i in 0..<people.count {
-            if people[i].lastName == who.lastName && people[i].firstName == who.firstName {
-                // duplicate person!
-                return
+        let errorOccurred: Bool = source.errorOccurred
+        if errorOccurred == false {
+            self.people.append(who)
+            if who.role == .Professor {
+                peopleArray[0].append(who)
+            } else if who.role == .TA {
+                peopleArray[1].append(who)
             } else {
-                self.people.append(who)
-                if who.role == .Professor {
-                    peopleArray[0].append(who)
-                } else if who.role == .TA {
-                    peopleArray[1].append(who)
-                } else {
-                    peopleArray[2].append(who)
-                }
-                break
+                peopleArray[2].append(who)
             }
         }
         self.tableView.reloadData()
