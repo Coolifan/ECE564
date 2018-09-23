@@ -20,6 +20,9 @@ class InformationViewController: UIViewController {
     @IBOutlet weak var hobbiesTextField: UITextField!
     @IBOutlet weak var languagesTextField: UITextField!
     
+    @IBOutlet weak var teamTextField: UITextField!
+    @IBOutlet weak var teamLabel: UILabel!
+
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var editButton: UIBarButtonItem!
     
@@ -44,16 +47,24 @@ class InformationViewController: UIViewController {
         switch person.role {
         case .Professor:
             self.roleTextField.text = "Professor"
+            self.teamLabel.isHidden = true
+            self.teamTextField.isHidden = true
         case .TA:
             self.roleTextField.text = "TA"
+            self.teamLabel.isHidden = true
+            self.teamTextField.isHidden = true
         case .Student:
             self.roleTextField.text = "Student"
+            self.teamLabel.isHidden = false
+            self.teamTextField.isHidden = false
+            self.teamTextField.text = person.team
         }
         self.fromTextField.text = person.whereFrom
         self.degreeTextField.text = person.degree
         self.hobbiesTextField.text = person.hobbies.joined(separator: ", ")
         self.languagesTextField.text = person.bestProgrammingLanguage.joined(separator: ", ")
         self.avatarImageView.image = person.gender == .Male ? UIImage(named: "male.png") : UIImage(named: "female.png")
+    
         // Remember to uncheck "User Interaction Enabled" for UITextFields in storyboard to be in "View Only" mode
     }
     

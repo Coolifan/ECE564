@@ -21,6 +21,9 @@ class EditInformationViewController: UIViewController {
     @IBOutlet weak var languagesTextField: UITextField!
     @IBOutlet weak var avatarImageView: UIImageView!
     
+    @IBOutlet weak var teamLabel: UILabel!
+    @IBOutlet weak var teamTextField: UITextField!
+    
     var errorOccurred : Bool = false
     
     
@@ -69,6 +72,9 @@ class EditInformationViewController: UIViewController {
         self.firstNameTextField.text = personBeingEdited.firstName
         self.lastNameTextField.text = personBeingEdited.lastName
         self.genderTextField.text = personBeingEdited.gender == .Male ? "Male" : "Female"
+        self.teamTextField.isHidden = true
+        self.teamLabel.isHidden = true
+        
         switch personBeingEdited.role {
         case .Professor:
             self.roleTextField.text = "Professor"
@@ -76,6 +82,9 @@ class EditInformationViewController: UIViewController {
             self.roleTextField.text = "TA"
         case .Student:
             self.roleTextField.text = "Student"
+            self.teamTextField.isHidden = false
+            self.teamLabel.isHidden = false
+            self.teamTextField.text = personBeingEdited.team
         }
         self.fromTextField.text = personBeingEdited.whereFrom
         self.degreeTextField.text = personBeingEdited.degree
@@ -87,7 +96,31 @@ class EditInformationViewController: UIViewController {
     
     // Get and check all inputs
     func updatePersonalInformation() -> Bool {
-        if  (self.genderTextField.text?.isEmpty)! || (self.firstNameTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! {
+        
+        // check for gender first
+        if self.genderTextField.text == "Male" {
+            self.personBeingEdited.gender = .Male
+        } else if self.genderTextField.text == "Female" {
+            self.personBeingEdited.gender = .Female
+        } else if (self.genderTextField.text?.isEmpty)! {
+            displayAlertMessage(title: "ERROR!", message: "All fields are required!")
+            return true
+        } else {
+            displayAlertMessage(title: "ERROR!", message: "Invalid gender!")
+            return true
+        }
+        
+        if  (self.genderTextField.text?.isEmpty)! || (self.firstNameTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! || ((self.teamTextField.text?.isEmpty)! && self.roleTextField.text == "Student") {
+            
+            if self.roleTextField.text == "Student" && self.personBeingEdited.role != .Student {
+                self.teamTextField.isHidden = false
+                self.teamLabel.isHidden = false
+                displayAlertMessage(title: "Almost done", message: "Please enter team name as well")
+                return true
+            } else if self.roleTextField.text == "Student" && self.personBeingEdited.role == .Student && (self.teamTextField.text?.isEmpty)! {
+                displayAlertMessage(title: "ERROR!", message: "All fields are required!")
+                return true
+            }
             displayAlertMessage(title: "ERROR!", message: "All fields are required!")
             return true
         }
@@ -95,21 +128,16 @@ class EditInformationViewController: UIViewController {
         self.personBeingEdited.whereFrom = self.fromTextField.text!
         self.personBeingEdited.fullName = self.personBeingEdited.firstName + " " + self.personBeingEdited.lastName
         
-        if self.genderTextField.text == "Male" {
-            self.personBeingEdited.gender = .Male
-        } else if self.genderTextField.text == "Female" {
-            self.personBeingEdited.gender = .Female
-        } else {
-            displayAlertMessage(title: "ERROR!", message: "Invalid gender!")
-            return true
-        }
         
         if self.roleTextField.text == "Student" {
             self.personBeingEdited.role = .Student
+            self.personBeingEdited.team = teamTextField.text!
         } else if self.roleTextField.text == "TA" {
             self.personBeingEdited.role = .TA
+            self.personBeingEdited.team = ""
         } else if self.roleTextField.text == "Professor" {
             self.personBeingEdited.role = .Professor
+            self.personBeingEdited.team = ""
         } else {
             displayAlertMessage(title: "ERROR!", message: "Invalid role!")
             return true
@@ -127,7 +155,7 @@ class EditInformationViewController: UIViewController {
         case "NA":
             self.personBeingEdited.degree = "NA"
         default:
-            self.personBeingEdited.degree = "Other"
+            self.personBeingEdited.degree = "other"
         }
         
         let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})

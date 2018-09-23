@@ -24,7 +24,7 @@ class PersonTableViewCell: UITableViewCell {
     
     func updateUI() {
         avatarImageView.image = thisPerson?.gender == .Male ? UIImage(named: "male.png") : UIImage(named: "female.png")
-        nameLabel.text = (thisPerson?.firstName)! + " " + (thisPerson?.lastName)!
+        nameLabel.text = (thisPerson?.firstName.uppercased())! + " " + (thisPerson?.lastName.uppercased())!
         descriptionLabel.text = thisPerson?.description
     }
     

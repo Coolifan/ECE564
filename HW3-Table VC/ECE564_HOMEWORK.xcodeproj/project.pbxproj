@@ -17,6 +17,7 @@
 		DD87500C21542F52007FF57E /* NewPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD87500B21542F52007FF57E /* NewPersonViewController.swift */; };
 		DD87500E21542F8C007FF57E /* ClassTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD87500D21542F8C007FF57E /* ClassTableViewController.swift */; };
 		DD8750182154985C007FF57E /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8750172154985C007FF57E /* PersonTableViewCell.swift */; };
+		DD9363B821574CF5005B70A4 /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9363B721574CF5005B70A4 /* SeparatorTableViewCell.swift */; };
 		DDCC86162155BBD600F53802 /* EditInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC86152155BBD600F53802 /* EditInformationViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		DD87500B21542F52007FF57E /* NewPersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPersonViewController.swift; sourceTree = "<group>"; };
 		DD87500D21542F8C007FF57E /* ClassTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassTableViewController.swift; sourceTree = "<group>"; };
 		DD8750172154985C007FF57E /* PersonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
+		DD9363B721574CF5005B70A4 /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SeparatorTableViewCell.swift; path = ECE564_HOMEWORK/Views/SeparatorTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		DDCC86152155BBD600F53802 /* EditInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditInformationViewController.swift; path = ECE564_HOMEWORK/Controllers/EditInformationViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				870821D41F1B9FD7002A3310 /* Main.storyboard */,
+				DD9363B721574CF5005B70A4 /* SeparatorTableViewCell.swift */,
 				DD8750172154985C007FF57E /* PersonTableViewCell.swift */,
 			);
 			path = Views;
@@ -184,6 +187,7 @@
 				DD8750182154985C007FF57E /* PersonTableViewCell.swift in Sources */,
 				DD87500E21542F8C007FF57E /* ClassTableViewController.swift in Sources */,
 				DD87500C21542F52007FF57E /* NewPersonViewController.swift in Sources */,
+				DD9363B821574CF5005B70A4 /* SeparatorTableViewCell.swift in Sources */,
 				870821D11F1B9FD7002A3310 /* AppDelegate.swift in Sources */,
 				DDCC86162155BBD600F53802 /* EditInformationViewController.swift in Sources */,
 				870822261F1C3004002A3310 /* DataModel.swift in Sources */,

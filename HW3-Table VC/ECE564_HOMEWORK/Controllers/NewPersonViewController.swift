@@ -21,6 +21,9 @@ class NewPersonViewController: UIViewController {
     @IBOutlet weak var hobbiesTextField: UITextField!
     @IBOutlet weak var languagesTextField: UITextField!
     
+    @IBOutlet weak var teamLabel: UILabel!
+    @IBOutlet weak var teamTextField: UITextField!
+    
     var errorOccurred: Bool = false
     // 2 functionalities for the addButton: 1. Check input validity 2. Redirect to another VC
     @IBOutlet weak var addButton: UIButton!
@@ -59,17 +62,18 @@ class NewPersonViewController: UIViewController {
     
     // Get and check all inputs. Return true if there is an error
     func getPersonalInformation() -> Bool {
-        if (self.firstNameTextField.text?.isEmpty)! || (self.lastNameTextField.text?.isEmpty)! || (self.genderTextField.text?.isEmpty)! || (self.fromTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! {
-            displayAlertMessage(title: "ERROR!", message: "All fields are required!")
-            return true
-        }
-        
         for person in self.people {
             if person.lastName == self.lastNameTextField.text && person.firstName == self.firstNameTextField.text {
                 // Check if duplicate
                 displayAlertMessage(title: "ERROR!", message: "\(person.firstName) \(person.lastName) is already in the class!")
                 return true
             }
+        }
+        
+        
+        if (self.firstNameTextField.text?.isEmpty)! || (self.lastNameTextField.text?.isEmpty)! || (self.genderTextField.text?.isEmpty)! || (self.fromTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! || ((self.roleTextField.text! == "Student") && (self.teamTextField.text?.isEmpty)!) {
+            displayAlertMessage(title: "ERROR!", message: "All fields are required!")
+            return true
         }
         
         self.newFace.firstName = self.firstNameTextField.text!
@@ -88,10 +92,13 @@ class NewPersonViewController: UIViewController {
         
         if self.roleTextField.text == "Student" {
             self.newFace.role = .Student
+            self.newFace.team = self.teamTextField.text!
         } else if self.roleTextField.text == "TA" {
             self.newFace.role = .TA
+            self.newFace.team = ""
         } else if self.roleTextField.text == "Professor" {
             self.newFace.role = .Professor
+            self.newFace.team = ""
         } else {
             displayAlertMessage(title: "ERROR!", message: "Invalid role!")
             return true
@@ -109,7 +116,7 @@ class NewPersonViewController: UIViewController {
         case "NA":
             self.newFace.degree = "NA"
         default:
-            self.newFace.degree = "Other"
+            self.newFace.degree = "other"
         }
         
         let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
