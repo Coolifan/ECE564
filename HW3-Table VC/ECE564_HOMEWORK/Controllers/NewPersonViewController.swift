@@ -22,8 +22,9 @@ class NewPersonViewController: UIViewController {
     @IBOutlet weak var languagesTextField: UITextField!
     
     var errorOccurred: Bool = false
-    
+    // 2 functionalities for the addButton: 1. Check input validity 2. Redirect to another VC
     @IBOutlet weak var addButton: UIButton!
+    // Get and check all inputs when Add button is clicked. If something goes wrong, stay on the view
     @IBAction func addNewPerson(_ sender: Any) {
         errorOccurred = getPersonalInformation()
         if errorOccurred == true {
@@ -31,20 +32,23 @@ class NewPersonViewController: UIViewController {
         }
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // dismiss the keyboard when tap anywhere
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
+    // If all input fields are valid, go on and trigger the segue. Stay on the view otherwise
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if sender as? UIButton == self.addButton {
             return errorOccurred ? false : true
@@ -52,25 +56,22 @@ class NewPersonViewController: UIViewController {
         return true
     }
     
+    
+    // Get and check all inputs. Return true if there is an error
     func getPersonalInformation() -> Bool {
-        
         if (self.firstNameTextField.text?.isEmpty)! || (self.lastNameTextField.text?.isEmpty)! || (self.genderTextField.text?.isEmpty)! || (self.fromTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! {
-            
-            // alert!
             displayAlertMessage(title: "ERROR!", message: "All fields are required!")
             return true
         }
         
         for person in self.people {
             if person.lastName == self.lastNameTextField.text && person.firstName == self.firstNameTextField.text {
-                // alert!
+                // Check if duplicate
                 displayAlertMessage(title: "ERROR!", message: "\(person.firstName) \(person.lastName) is already in the class!")
                 return true
             }
         }
         
-
-        // all the text fields have input
         self.newFace.firstName = self.firstNameTextField.text!
         self.newFace.lastName = self.lastNameTextField.text!
         self.newFace.whereFrom = self.fromTextField.text!
@@ -81,7 +82,6 @@ class NewPersonViewController: UIViewController {
         } else if self.genderTextField.text == "Female" {
             self.newFace.gender = .Female
         } else {
-            // alert!
             displayAlertMessage(title: "ERROR!", message: "Invalid gender!")
             return true
         }
@@ -93,7 +93,6 @@ class NewPersonViewController: UIViewController {
         } else if self.roleTextField.text == "Professor" {
             self.newFace.role = .Professor
         } else {
-            // alert!
             displayAlertMessage(title: "ERROR!", message: "Invalid role!")
             return true
         }
@@ -115,7 +114,6 @@ class NewPersonViewController: UIViewController {
         
         let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
         if hobbies.count > 3 {
-            // alert!
             displayAlertMessage(title: "ERROR!", message: "Up to 3 hobbies!")
             return true
         }
@@ -123,22 +121,21 @@ class NewPersonViewController: UIViewController {
         
         let languages: [String] = languagesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
         if languages.count > 3 {
-            //alert!
             displayAlertMessage(title: "ERROR!", message: "Up to 3 languages!")
             return true
-            
         }
         self.newFace.bestProgrammingLanguage = languages
         
-        return false
+        return false // all inputs are valid
     }
     
+    
+    // Pop-up alert to display the error message
     func displayAlertMessage(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
     
 
 }

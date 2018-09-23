@@ -603,11 +603,6 @@
                                 <segue destination="Zbt-tS-V4m" kind="unwind" unwindAction="returnFromEditInformationViewWithSegue:" id="J8u-2z-gTY"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="b78-VS-Nvh">
-                            <connections>
-                                <segue destination="Zbt-tS-V4m" kind="unwind" unwindAction="returnFromEditInformationViewWithSegue:" id="wTw-BK-yPh"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="avatarImageView" destination="Jcb-Zb-wgm" id="nQB-Dd-jzZ"/>
@@ -619,7 +614,7 @@
                         <outlet property="languagesTextField" destination="bZU-ch-3bj" id="T5R-dA-4Qh"/>
                         <outlet property="lastNameTextField" destination="Ait-t0-buV" id="CZ7-eY-y6t"/>
                         <outlet property="roleTextField" destination="k2Q-vp-gQQ" id="ps9-eF-bqt"/>
-                        <outlet property="saveButton" destination="b78-VS-Nvh" id="gPi-x1-iVg"/>
+                        <segue destination="yeo-nK-EDR" kind="show" identifier="backToInformationView" id="S7K-xh-9IA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RAX-aW-thW" sceneMemberID="firstResponder"/>
@@ -632,4 +627,7 @@
         <image name="ECE_Logo" width="795" height="109"/>
         <image name="newPerson" width="512" height="512"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="S7K-xh-9IA"/>
+    </inferredMetricsTieBreakers>
 </document>

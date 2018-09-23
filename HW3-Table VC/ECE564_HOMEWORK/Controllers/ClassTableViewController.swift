@@ -11,14 +11,14 @@ import UIKit
 class ClassTableViewController: UITableViewController {
     
     var people = [DukePerson]()
-    var peopleArray: [[DukePerson]] = [[],[],[]] //for easy alignment with tableViewCell indices
+    var peopleArray: [[DukePerson]] = [[],[],[]] //for easier alignment with tableViewCell indices
     @IBOutlet weak var addButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadInitialData()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -26,17 +26,19 @@ class ClassTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return self.peopleArray.count
     }
-
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.peopleArray[section].count+1 // row 0 will be separator cells, so add 1
+        return self.peopleArray[section].count + 1 // row 0 will be separator cells, so add 1
     }
+    
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        if indexPath.row == 0 { // display a separatorCell
             let cell = tableView.dequeueReusableCell(withIdentifier: "SeparatorCell", for: indexPath)
             switch indexPath.section {
             case 0:
@@ -47,7 +49,7 @@ class ClassTableViewController: UITableViewController {
                 cell.textLabel?.text = "Student"
             }
             return cell
-        } else {
+        } else { // display a personCell
             let cell = tableView.dequeueReusableCell(withIdentifier: "PersonCell", for: indexPath) as! PersonTableViewCell
             let nextPerson: DukePerson = peopleArray[indexPath.section][indexPath.row-1]
             cell.thisPerson = nextPerson
@@ -55,13 +57,16 @@ class ClassTableViewController: UITableViewController {
         }
     }
     
+    
     var selectedPerson: DukePerson?
+    // Whenever a personCell is clicked, redirect to informationView
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Whenever a personCell is clicked, show informationView
         selectedPerson = peopleArray[indexPath.section][indexPath.row-1]
         performSegue(withIdentifier: "showInformation", sender: nil)
     }
     
+    
+    // Set the data on the destination VCs when + sign or a tableViewCell is tapped
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showInformation" {
             let informationVC = segue.destination as! InformationViewController
@@ -73,6 +78,7 @@ class ClassTableViewController: UITableViewController {
         }
     }
     
+    // Pre-populate the table with hardcoded data
     func loadInitialData() {
         let myself: DukePerson = DukePerson(firstName: "Yifan", lastName: "Li", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Python"], hobbies: ["Traveling", "Playing online games", "Cardio workout"], role: .Student)
         let professor: DukePerson = DukePerson(firstName: "Ric", lastName: "Telford", whereFrom: "Morrisville, NC", gender: .Male, degree: "BS", bestProgrammingLanguage: ["Swift", "C", "C++"], hobbies: ["Golf", "Swimming", "Biking"], role: .Professor)
@@ -97,6 +103,8 @@ class ClassTableViewController: UITableViewController {
         }
     }
     
+    
+    // Add a new person to the class if all information is valid
     @IBAction func returnFromNewPerson(segue: UIStoryboardSegue) {
         let source: NewPersonViewController = segue.source as! NewPersonViewController
         let who: DukePerson = source.newFace
@@ -114,6 +122,8 @@ class ClassTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
+    
+    // Update tableView after someone's information has been edited
     @IBAction func returnFromInformationView(segue: UIStoryboardSegue) {
         // up until this point, the corresponding element in people and peopleArray has been updated
         peopleArray[0].removeAll()
@@ -131,8 +141,5 @@ class ClassTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
-    
-    
-    
     
 }

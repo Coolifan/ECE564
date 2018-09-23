@@ -9,6 +9,8 @@
 import UIKit
 
 class PersonTableViewCell: UITableViewCell {
+    
+    // Each personCell consists of 3 parts: An image/avatar, a text label for name, and a text label for description
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!

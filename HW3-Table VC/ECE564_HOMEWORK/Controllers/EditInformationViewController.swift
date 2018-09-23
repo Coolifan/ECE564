@@ -11,7 +11,6 @@ import UIKit
 class EditInformationViewController: UIViewController {
 
     var personBeingEdited = DukePerson()
-    
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var genderTextField: UITextField!
@@ -22,31 +21,50 @@ class EditInformationViewController: UIViewController {
     @IBOutlet weak var languagesTextField: UITextField!
     @IBOutlet weak var avatarImageView: UIImageView!
     
-    @IBOutlet weak var saveButton: UIBarButtonItem!
+    var errorOccurred : Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadPersonalInformation()
+        // create the rightBarButtonItem and add a action for future use
+        let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveChanges))
+        self.navigationItem.rightBarButtonItem = saveButton
+        
         // dismiss the keyboard when tap anywhere
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
     }
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
+    // Get and check all inputs when save button is clicked
+    @objc func saveChanges() {
+        errorOccurred = updatePersonalInformation()
+        if errorOccurred == true { // if there is an error, stay on the view
+            return
+        } else { // if all inputs are valid, proceed to update
+            performSegue(withIdentifier: "backToInformationView", sender: self)
+        }
+    }
+
+    
+    // Pass the updated information back
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (sender as! UIBarButtonItem) == self.saveButton {
+        if segue.identifier == "backToInformationView" {
             let informationVC = segue.destination as! InformationViewController
-            updatePersonalInformation()
             informationVC.person = self.personBeingEdited
         }
     }
     
+    
+    // Display all the old information
     func loadPersonalInformation() {
         self.firstNameTextField.text = personBeingEdited.firstName
         self.lastNameTextField.text = personBeingEdited.lastName
@@ -66,70 +84,76 @@ class EditInformationViewController: UIViewController {
         self.avatarImageView.image = personBeingEdited.gender == .Male ? UIImage(named: "male.png") : UIImage(named: "female.png")
     }
     
-    func updatePersonalInformation() {
-        if  self.genderTextField.text == nil || self.firstNameTextField.text == nil || self.degreeTextField.text == nil || self.roleTextField.text == nil || self.hobbiesTextField.text == nil || self.languagesTextField.text == nil {
-            return
-            // alert!
-        } else {
-            self.personBeingEdited.firstName = self.firstNameTextField.text!
-            self.personBeingEdited.lastName = self.lastNameTextField.text!
-            self.personBeingEdited.whereFrom = self.fromTextField.text!
-            self.personBeingEdited.fullName = self.personBeingEdited.firstName + " " + self.personBeingEdited.lastName
-            
-            if self.genderTextField.text == "Male" {
-                self.personBeingEdited.gender = .Male
-            } else if self.genderTextField.text == "Female" {
-                self.personBeingEdited.gender = .Female
-            } else {
-                // invalid gender
-            }
-            
-            if self.roleTextField.text == "Student" {
-                self.personBeingEdited.role = .Student
-            } else if self.roleTextField.text == "TA" {
-                self.personBeingEdited.role = .TA
-            } else if self.roleTextField.text == "Professor" {
-                self.personBeingEdited.role = .Professor
-            } else {
-                // invalid role
-            }
-            
-            switch self.degreeTextField.text {
-            case "MS":
-                self.personBeingEdited.degree = "MS"
-            case "BS":
-                self.personBeingEdited.degree = "BS"
-            case "PhD":
-                self.personBeingEdited.degree = "PhD"
-            case "MENG":
-                self.personBeingEdited.degree = "MENG"
-            case "NA":
-                self.personBeingEdited.degree = "NA"
-            case "":
-                return
-            // error
-            default:
-                self.personBeingEdited.degree = "Other"
-            }
-            
-            let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
-            if hobbies.count > 3 {
-                // error handling
-                return
-            }
-            self.personBeingEdited.hobbies = hobbies
-            
-            let languages: [String] = languagesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
-            if languages.count > 3 {
-                //error handling
-                return
-            }
-            self.personBeingEdited.bestProgrammingLanguage = languages
-            
-            
+    
+    // Get and check all inputs
+    func updatePersonalInformation() -> Bool {
+        if  (self.genderTextField.text?.isEmpty)! || (self.firstNameTextField.text?.isEmpty)! || (self.degreeTextField.text?.isEmpty)! || (self.roleTextField.text?.isEmpty)! || (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! {
+            displayAlertMessage(title: "ERROR!", message: "All fields are required!")
+            return true
         }
+        
+        self.personBeingEdited.whereFrom = self.fromTextField.text!
+        self.personBeingEdited.fullName = self.personBeingEdited.firstName + " " + self.personBeingEdited.lastName
+        
+        if self.genderTextField.text == "Male" {
+            self.personBeingEdited.gender = .Male
+        } else if self.genderTextField.text == "Female" {
+            self.personBeingEdited.gender = .Female
+        } else {
+            displayAlertMessage(title: "ERROR!", message: "Invalid gender!")
+            return true
+        }
+        
+        if self.roleTextField.text == "Student" {
+            self.personBeingEdited.role = .Student
+        } else if self.roleTextField.text == "TA" {
+            self.personBeingEdited.role = .TA
+        } else if self.roleTextField.text == "Professor" {
+            self.personBeingEdited.role = .Professor
+        } else {
+            displayAlertMessage(title: "ERROR!", message: "Invalid role!")
+            return true
+        }
+        
+        switch self.degreeTextField.text {
+        case "MS":
+            self.personBeingEdited.degree = "MS"
+        case "BS":
+            self.personBeingEdited.degree = "BS"
+        case "PhD":
+            self.personBeingEdited.degree = "PhD"
+        case "MENG":
+            self.personBeingEdited.degree = "MENG"
+        case "NA":
+            self.personBeingEdited.degree = "NA"
+        default:
+            self.personBeingEdited.degree = "Other"
+        }
+        
+        let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
+        if hobbies.count > 3 {
+            displayAlertMessage(title: "ERROR!", message: "Up to 3 hobbies!")
+            return true
+        }
+        self.personBeingEdited.hobbies = hobbies
+        
+        let languages: [String] = languagesTextField.text!.components(separatedBy: ", ").filter({$0 != ""})
+        if languages.count > 3 {
+            displayAlertMessage(title: "ERROR!", message: "Up to 3 languages!")
+            return true
+        }
+        self.personBeingEdited.bestProgrammingLanguage = languages
+        
+        return false // all inputs are valid
     }
-
+    
+    
+    // Pop-up alert to display error messages
+    func displayAlertMessage(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 
 
 }

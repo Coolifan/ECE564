@@ -26,15 +26,17 @@ class InformationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadPersonalInformation()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
+    // Display a person's detailed information
     func loadPersonalInformation() {
         self.firstNameTextField.text = person.firstName
         self.lastNameTextField.text = person.lastName
@@ -52,20 +54,30 @@ class InformationViewController: UIViewController {
         self.hobbiesTextField.text = person.hobbies.joined(separator: ", ")
         self.languagesTextField.text = person.bestProgrammingLanguage.joined(separator: ", ")
         self.avatarImageView.image = person.gender == .Male ? UIImage(named: "male.png") : UIImage(named: "female.png")
-        
-        // Remember to uncheck "User Interaction Enabled" for UITextFields in storyboard
+        // Remember to uncheck "User Interaction Enabled" for UITextFields in storyboard to be in "View Only" mode
     }
     
+    
+    // Pass the data to editInformationVC
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (sender as! UIBarButtonItem) == self.editButton {
             let targetVC = segue.destination as! EditInformationViewController
             targetVC.personBeingEdited = person
-        } else {
+        } else { // if clicked Cancel
             return
         }
     }
     
+    
+    // Update a person's information if all inputs are valid
+    var personEditted = DukePerson()
     @IBAction func returnFromEditInformationView(segue:UIStoryboardSegue) {
+        let source: EditInformationViewController = segue.source as! EditInformationViewController
+        personEditted = source.personBeingEdited
+        let errorOccurred: Bool = source.errorOccurred
+        if errorOccurred == false {
+            self.person = source.personBeingEdited
+        }
         loadPersonalInformation()
     }
 
