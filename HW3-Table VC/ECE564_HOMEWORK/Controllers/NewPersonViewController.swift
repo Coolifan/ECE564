@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NewPersonViewController: UIViewController {
+class NewPersonViewController: UIViewController, UITextFieldDelegate {
     
     var newFace = DukePerson()
     var people = [DukePerson]()
@@ -38,10 +38,36 @@ class NewPersonViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // dismiss the keyboard when tap anywhere
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
+        // dismiss the keyboard when press return key
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        genderTextField.delegate = self
+        roleTextField.delegate = self
+        fromTextField.delegate = self
+        degreeTextField.delegate = self
+        hobbiesTextField.delegate = self
+        languagesTextField.delegate = self
+        teamTextField.delegate = self
+    }
+    
+    
+    // dismiss current keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        firstNameTextField.resignFirstResponder()
+        lastNameTextField.resignFirstResponder()
+        genderTextField.resignFirstResponder()
+        roleTextField.resignFirstResponder()
+        fromTextField.resignFirstResponder()
+        degreeTextField.resignFirstResponder()
+        hobbiesTextField.resignFirstResponder()
+        languagesTextField.resignFirstResponder()
+        teamTextField.resignFirstResponder()
+        return true
     }
 
     

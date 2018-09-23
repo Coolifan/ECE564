@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditInformationViewController: UIViewController {
+class EditInformationViewController: UIViewController, UITextFieldDelegate {
 
     var personBeingEdited = DukePerson()
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -25,10 +25,11 @@ class EditInformationViewController: UIViewController {
     @IBOutlet weak var teamTextField: UITextField!
     
     var errorOccurred : Bool = false
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadPersonalInformation()
         // create the rightBarButtonItem and add a action for future use
         let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveChanges))
@@ -38,6 +39,27 @@ class EditInformationViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
+        // dismiss the keyboard when press return key
+        genderTextField.delegate = self
+        roleTextField.delegate = self
+        fromTextField.delegate = self
+        degreeTextField.delegate = self
+        hobbiesTextField.delegate = self
+        languagesTextField.delegate = self
+        teamTextField.delegate = self
+    }
+    
+    
+    // dismiss current keyboard
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        genderTextField.resignFirstResponder()
+        roleTextField.resignFirstResponder()
+        fromTextField.resignFirstResponder()
+        degreeTextField.resignFirstResponder()
+        hobbiesTextField.resignFirstResponder()
+        languagesTextField.resignFirstResponder()
+        teamTextField.resignFirstResponder()
+        return true
     }
     
     

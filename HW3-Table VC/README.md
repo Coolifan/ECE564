@@ -1,4 +1,23 @@
 ## ECE 564 
+
+### HW3 - Table VC
+
+**Extra features added:**
+
+\*"Team" field has been added to person information screen and to the data model. "Team" field only applies to students.
+
+\*More detailed person description message, including degree information and team information if applicable.
+
+\*More detailed table view cell design, including the avatar image view. Clear button is enabled in all editable text fields.
+
+\*All the files are well organized based on MVC pattern.
+
+\*Dismiss the keyboard when the user clicks outside of text fields or presses the return key.
+
+
+
+
+
 ### HW2 - View
 
 **Features added:**
