@@ -1,5 +1,17 @@
 ## ECE 564 
 
+
+### HW4 - Graphics
+
+\* "Flip" button is only available for myself (Yifan Li)
+
+\* Added rotation effect for the soccer image
+
+\* A crowd cheering audio is added to the drawing view 
+
+
+
+
 ### HW3 - Table VC
 
 **Extra features added:**
