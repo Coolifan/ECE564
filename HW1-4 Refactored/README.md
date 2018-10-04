@@ -3,6 +3,8 @@
 
 ### HW4 - Graphics
 
+\* Refactored all HWs on Oct. 3
+
 \* "Flip" button is only available for myself (Yifan Li)
 
 \* Added rotation effect for the soccer image
