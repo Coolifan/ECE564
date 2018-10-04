@@ -48,7 +48,11 @@ class InformationViewController: UIViewController {
         if firstNameTextField.text != "Yifan" && lastNameTextField.text != "Li" {
             flipButton.isHidden = true
         }
+        
+        // change the navigation bar button item color
+        self.navigationController?.navigationBar.tintColor = UIColor.white
     }
+    
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         // Toggles the edit button state
@@ -132,7 +136,7 @@ class InformationViewController: UIViewController {
     
     // Get and check all inputs. Return true if there is an error
     func getPersonalInformation() -> Bool {
-        if  (self.fromTextField.text?.isEmpty)! ||   (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! || ((self.roleSC.selectedSegmentIndex == 0) && (self.teamTextField.text?.isEmpty)!) {
+        if  (self.fromTextField.text?.isEmpty)! ||   (self.hobbiesTextField.text?.isEmpty)! || (self.languagesTextField.text?.isEmpty)! {
             displayAlertMessage(title: "ERROR!", message: "All fields are required!")
             return true
         }
@@ -149,6 +153,16 @@ class InformationViewController: UIViewController {
         default:
             self.person.role = .Student
         }
+        if self.person.role == .Student {
+            self.teamTextField.isEnabled = true
+            self.teamTextField.isUserInteractionEnabled = true
+            if self.teamTextField.text?.isEmpty == true {
+                displayAlertMessage(title: "ERROR!", message: "No team info!")
+                return true
+            }
+            self.person.team = self.teamTextField.text!
+        }
+        
         
         switch self.degreeSC.selectedSegmentIndex {
         case 0:
