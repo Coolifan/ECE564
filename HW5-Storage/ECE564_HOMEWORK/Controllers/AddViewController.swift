@@ -35,6 +35,10 @@ class AddViewController: UIViewController {
         self.newPerson.gender = .Male
         self.newPerson.role = .Student
         self.newPerson.degree = "MS"
+        
+        // Dismiss the keyboard when tapped outside text fields
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
+        self.view.addGestureRecognizer(tapGesture)
     }
     
     @IBAction func genderSCTapped(_ sender: UISegmentedControl) {
@@ -152,5 +156,16 @@ class AddViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    // End editing when tapped outside the text fields
+    @objc func tappedOutside() {
+        firstNameTextField.endEditing(true)
+        lastNameTextField.endEditing(true)
+        fromTextField.endEditing(true)
+        hobbiesTextField.endEditing(true)
+        languagesTextField.endEditing(true)
+        teamTextField.endEditing(true)
     }
 }

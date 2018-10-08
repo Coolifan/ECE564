@@ -43,7 +43,6 @@ class InformationViewController: UIViewController {
         self.isEditing = false
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        
         // Flip button is only available to myself
         if firstNameTextField.text != "Yifan" && lastNameTextField.text != "Li" {
             flipButton.isHidden = true
@@ -52,6 +51,10 @@ class InformationViewController: UIViewController {
         
         // change the navigation bar button item color
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        
+        // Dismiss the keyboard when tapped outside the text fields
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
+        self.view.addGestureRecognizer(tapGesture)
     }
     
     
@@ -70,8 +73,8 @@ class InformationViewController: UIViewController {
             // preview mode
             toggleUserInteraction(ifEnabled: false)
         }
-        
     }
+    
     
     @objc func saveButtonPressed(sender: UIBarButtonItem) {
         errorOccurred = getPersonalInformation()
@@ -81,8 +84,8 @@ class InformationViewController: UIViewController {
         } else {
             return
         }
-        
     }
+    
     
     // Display a person's detailed information
     func loadPersonalInformation() {
@@ -123,6 +126,7 @@ class InformationViewController: UIViewController {
         }
     }
     
+    
     func toggleUserInteraction(ifEnabled: Bool) {
         self.firstNameTextField.isUserInteractionEnabled = false
         self.lastNameTextField.isUserInteractionEnabled = false
@@ -134,6 +138,7 @@ class InformationViewController: UIViewController {
         self.roleSC.isUserInteractionEnabled = ifEnabled
         self.degreeSC.isUserInteractionEnabled = ifEnabled
     }
+    
     
     // Get and check all inputs. Return true if there is an error
     func getPersonalInformation() -> Bool {
@@ -189,6 +194,7 @@ class InformationViewController: UIViewController {
         return false
     }
     
+    
     // Enable the team info input field
     @IBAction func roleSCTapped(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
@@ -200,7 +206,14 @@ class InformationViewController: UIViewController {
         }
     }
     
-
+    // End editing when tapped outside the text fields
+    @objc func tappedOutside() {
+        fromTextField.endEditing(true)
+        languagesTextField.endEditing(true)
+        hobbiesTextField.endEditing(true)
+    }
+    
+    
     // Pop-up alert to display the error message
     func displayAlertMessage(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
@@ -208,10 +221,9 @@ class InformationViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    //MARK: HW4
+    //Segue to/from Drawing View
     @IBAction func returnFromDrawingView(segue: UIStoryboardSegue) {}
     
-
     override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
         let segue = UnwindFlipSegue(identifier: unwindSegue.identifier, source: unwindSegue.source, destination: unwindSegue.destination)
         segue.perform()

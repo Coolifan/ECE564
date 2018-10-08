@@ -9,19 +9,19 @@
 import UIKit
 
 
-enum Gender {
-    case Male
-    case Female
+enum Gender: String, Codable {
+    case Male = "Male"
+    case Female = "Female"
 }
 
-class Person {
-    var firstName = "First"
-    var lastName = "Last"
-    var whereFrom = "Anywhere"  // this is just a free String - can be city, state, both, etc.
-    var gender : Gender = .Male
-}
+//class Person: Codable {
+//    var firstName = "First"
+//    var lastName = "Last"
+//    var whereFrom = "Anywhere"  // this is just a free String - can be city, state, both, etc.
+//    var gender : Gender = .Male
+//}
 
-enum DukeRole : String {
+enum DukeRole : String, Codable {
     case Student = "Student"
     case Professor = "Professor"
     case TA = "Teaching Assistant"
@@ -33,7 +33,7 @@ protocol BlueDevil {
 }
 
 
-class DukePerson: Person, BlueDevil, CustomStringConvertible {
+class DukePerson: BlueDevil, CustomStringConvertible, Codable {
     var hobbies: [String] = []
     var role: DukeRole = .Student
     var degree: String = ""
@@ -41,12 +41,22 @@ class DukePerson: Person, BlueDevil, CustomStringConvertible {
     var fullName: String = ""
     var team: String = ""
     
-    override init() {
-        super.init()
+    // originally fro Person class
+    var firstName = "First"
+    var lastName = "Last"
+    var whereFrom = "Anywhere"  // this is just a free String - can be city, state, both, etc.
+    var gender : Gender = .Male
+    
+    init() {
+        
     }
+    
+//    override init() {
+//        super.init()
+//    }
 
     init(firstName: String, lastName: String, whereFrom: String, gender: Gender, degree: String, bestProgrammingLanguage: [String], hobbies: [String], role: DukeRole, team: String) {
-        super.init()
+        //super.init()
         self.firstName = firstName
         self.lastName = lastName
         self.whereFrom = whereFrom
@@ -58,6 +68,8 @@ class DukePerson: Person, BlueDevil, CustomStringConvertible {
         self.fullName = firstName + " " + lastName
         self.team = team
     }
+    
+
     
     // Add CustomStringConvertible conformance to DukePerson class by defining the description property
     var description: String {
