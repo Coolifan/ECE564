@@ -11,7 +11,7 @@ import UIKit
 class TableViewController: UITableViewController, PassDataBack {
 
     var people = [DukePerson]() //Array of all DukePersons, will be saved/loaded
-    var teams: [String: Int] = [:] //Dictionary of used for linking between teams and their sections in table, will be saved/loaded
+    var teams: [String: Int] = [:] //Dictionary used for linking between teams and their sections in table, will be saved/loaded
     var peopleArray: [[DukePerson]] = [[], []] //for easier alignment with tableViewCell indices (indexPath.section & row)
     var studentsWithNoTeams: [DukePerson] = [] //Array of DukePersons with no teams
     
