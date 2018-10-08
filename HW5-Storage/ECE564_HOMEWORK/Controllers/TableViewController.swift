@@ -19,8 +19,7 @@ class TableViewController: UITableViewController, PassDataBack {
         super.viewDidLoad()
         loadInitialData()
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
     }
 
     // MARK: - Table view data source
@@ -49,11 +48,14 @@ class TableViewController: UITableViewController, PassDataBack {
                             cell.isHidden = true
                         }
                         cell.roleLabel.text = "Team " + team.teamName
-                        break
+                        if team.teamName == "" {
+                            cell.roleLabel.text = "Students With No Teams"
+                            break
+                        }
                     }
                 }
             }
-
+      
             return cell
         } else { // display a personCell
             let cell = tableView.dequeueReusableCell(withIdentifier: "PersonCell", for: indexPath) as! PersonCell
@@ -64,7 +66,7 @@ class TableViewController: UITableViewController, PassDataBack {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if peopleArray[indexPath.section].isEmpty && indexPath.row == 0 {
+        if peopleArray[indexPath.section].isEmpty && indexPath.row == 0 { // hide the separator cell as well
             return CGFloat(0.0)
         } else if !peopleArray[indexPath.section].isEmpty && indexPath.row == 0 { // separator cell
             return CGFloat(44.0)
@@ -86,6 +88,62 @@ class TableViewController: UITableViewController, PassDataBack {
         }
     }
     
+    /*
+     // Override to support conditional editing of the table view.
+     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
+    
+    // Disable swiping to delete for separator cells and professors & TAs sections
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if indexPath.row == 0 || indexPath.section <= 1 {
+            return UITableViewCellEditingStyle.none
+        } else {
+            return UITableViewCellEditingStyle.delete
+        }
+    }
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            for i in 0..<people.count {
+                if people[i].fullName == peopleArray[indexPath.section][indexPath.row - 1].fullName {
+                    people.remove(at: i)
+                    break
+                }
+            }
+            for i in 0..<studentsWithNoTeams.count {
+                if studentsWithNoTeams[i].fullName == peopleArray[indexPath.section][indexPath.row-1].fullName {
+                    studentsWithNoTeams.remove(at: i)
+                    break
+                }
+            }
+            peopleArray[indexPath.section].remove(at: indexPath.row - 1)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+        }
+    }
+    
+    
+    /*
+     // Override to support rearranging the table view.
+     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+     
+     }
+     */
+    
+    /*
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
+    
     @IBOutlet weak var addButton: UIBarButtonItem!
     // When anything except a personCell is clicked, do not perform segue
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -105,40 +163,6 @@ class TableViewController: UITableViewController, PassDataBack {
     }
  
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     
     // Pre-populate the table with hardcoded data
     func loadInitialData() {
@@ -171,7 +195,6 @@ class TableViewController: UITableViewController, PassDataBack {
     }
     
     // Add a new person to the class if all information is valid
-    
     @IBAction func returnFromNewPerson(segue: UIStoryboardSegue) {
         let source: AddViewController = segue.source as! AddViewController
         let newPerson: DukePerson = source.newPerson
@@ -184,52 +207,57 @@ class TableViewController: UITableViewController, PassDataBack {
                 peopleArray[0].append(newPerson)
             } else if newPerson.role == .TA {
                 peopleArray[1].append(newPerson)
-            } else if newPerson.role == .Student && newPerson.team == "" {
-                studentsWithNoTeams.append(newPerson)
-            } else {
-                for team in self.teams {
-                    if newPerson.team == team.teamName { // new member for an existing team
-                        peopleArray[team.sectionID].append(newPerson)
-                        // self.teams = sortByTeams()
-                        if !studentsWithNoTeams.isEmpty {
-                            self.peopleArray.append(studentsWithNoTeams)
+            }
+            else { // a new student
+                if newPerson.team != "" { // team name given
+                    for team in self.teams {
+                        if newPerson.team == team.teamName { // a new student for an existing team
+                            peopleArray[team.sectionID].append(newPerson)
+                            self.tableView.reloadData()
+                            return
                         }
-                        self.tableView.reloadData()
-                        return
                     }
+                    // new team, team section index = teams.count
+                    let newTeam = (teamName: newPerson.team, sectionID: self.teams.count + 2) // eg: teams.count = 1, teams[1] -> tableView Section 3
+                    self.teams.append(newTeam)
+                    self.peopleArray.append([])
+                    self.peopleArray[newTeam.sectionID].append(newPerson)
+                } else { // a new student without teams
+                    
+                    var studentsWithoutTeams: Bool = false
+                    for team in teams {
+                        if team.teamName == "" {
+                            studentsWithoutTeams = true
+                            self.peopleArray[team.sectionID].append(newPerson)
+                            break
+                        }
+                    }
+                    
+                    let newNoTeam = (teamName: newPerson.team, sectionID: self.teams.count + 2)
+                    if studentsWithoutTeams == false {
+                        self.teams.append(newNoTeam)
+                        self.peopleArray.append([])
+                        self.peopleArray[newNoTeam.sectionID].append(newPerson)
+                    }
+                    self.studentsWithNoTeams.append(newPerson)
+                    
                 }
-                // new team, team section index = teams.count
-                let newTeam = (teamName: newPerson.team, sectionID: self.teams.count + 2) // eg: teams.count = 1, teams[1] -> tableView Section 3
-                self.teams.append(newTeam)
-                self.peopleArray.append([])
-                self.peopleArray[newTeam.sectionID].append(newPerson)
             }
-            // self.teams = sortByTeams()
-            if !studentsWithNoTeams.isEmpty {
-                self.peopleArray.append(studentsWithNoTeams)
-            }
+            
             self.tableView.reloadData()
         }
         
     }
     
-//    func sortByTeams() -> [(String, Int)] {
-//        var sortedTeams = self.teams.sorted(by: {$0.0 < $1.0})
-//        for i in 0..<sortedTeams.count {
-//            sortedTeams[i].sectionID = 2 + i
-//        }
-//        return sortedTeams
-//    }
     
     
-    
-    // protocol method for receiving data
+    // protocol method for receiving data from editing mode
     func dataReceived(personEdited: DukePerson) {
         for i in 0..<self.peopleArray.count {
             for j in 0..<self.peopleArray[i].count {
                 if peopleArray[i][j].fullName == personEdited.fullName {
                     peopleArray[i].remove(at: j)
-                    break
+                    break // MUST break here! Otherwise, index out of range after removal.
                 }
             }
         }
@@ -238,27 +266,42 @@ class TableViewController: UITableViewController, PassDataBack {
             self.peopleArray[0].append(personEdited)
         } else if personEdited.role == .TA {
             self.peopleArray[1].append(personEdited)
-        } else if personEdited.role == .Student && personEdited.team == "" {
-            studentsWithNoTeams.append(personEdited)
-        } else {
-            for team in self.teams {
-                if personEdited.team == team.teamName { // new member for an existing team
-                    peopleArray[team.sectionID].append(personEdited)
-                    if !studentsWithNoTeams.isEmpty {
-                        self.peopleArray.append(studentsWithNoTeams)
-                    }
-                    self.tableView.reloadData()
-                    return
-                }
-            }
-            // new team
-            let newTeam = (teamName: personEdited.team, sectionID: self.teams.count + 2) // eg: teams.count = 1, teams[1] -> tableView Section 3
-            self.teams.append(newTeam)
-            self.peopleArray.append([])
-            self.peopleArray[newTeam.sectionID].append(personEdited)
         }
-        if !studentsWithNoTeams.isEmpty {
-            self.peopleArray.append(studentsWithNoTeams)
+
+        else { // a new student
+            if personEdited.team != "" { // team name given
+                for team in self.teams {
+                    if personEdited.team == team.teamName { // a new student for an existing team
+                        peopleArray[team.sectionID].append(personEdited)
+                        self.tableView.reloadData()
+                        return
+                    }
+                }
+                // new team, team section index = teams.count
+                let newTeam = (teamName: personEdited.team, sectionID: self.teams.count + 2) // eg: teams.count = 1, teams[1] -> tableView Section 3
+                self.teams.append(newTeam)
+                self.peopleArray.append([])
+                self.peopleArray[newTeam.sectionID].append(personEdited)
+            } else { // a new student without teams
+                
+                var studentsWithoutTeams: Bool = false
+                for team in teams {
+                    if team.teamName == "" {
+                        studentsWithoutTeams = true
+                        self.peopleArray[team.sectionID].append(personEdited)
+                        break
+                    }
+                }
+                
+                let newNoTeam = (teamName: personEdited.team, sectionID: self.teams.count + 2)
+                if studentsWithoutTeams == false {
+                    self.teams.append(newNoTeam)
+                    self.peopleArray.append([])
+                    self.peopleArray[newNoTeam.sectionID].append(personEdited)
+                }
+                self.studentsWithNoTeams.append(personEdited)
+                
+            }
         }
         self.tableView.reloadData()
     }

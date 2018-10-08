@@ -1,11 +1,11 @@
-////
-////  DataModel.swift
-////  ECE564_HOMEWORK
-////
-////  Created by Yifan Li on 9/9/18.
-////  Copyright © 2018 ece564. All rights reserved.
-////
 //
+//  DataModel.swift
+//  ECE564_HOMEWORK
+//
+//  Created by Yifan Li on 10/3/18.
+//  Copyright © 2018 ece564. All rights reserved.
+//
+
 import UIKit
 
 

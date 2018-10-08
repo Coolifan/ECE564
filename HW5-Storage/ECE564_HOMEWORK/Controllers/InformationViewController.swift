@@ -143,7 +143,6 @@ class InformationViewController: UIViewController {
         }
     
         self.person.whereFrom = self.fromTextField.text!
-        // self.person.fullName = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
         self.person.gender = (self.genderSC.selectedSegmentIndex == 0) ? .Male : .Female
         
         switch self.roleSC.selectedSegmentIndex {
@@ -212,8 +211,7 @@ class InformationViewController: UIViewController {
     //MARK: HW4
     @IBAction func returnFromDrawingView(segue: UIStoryboardSegue) {}
     
-    
-    
+
     override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
         let segue = UnwindFlipSegue(identifier: unwindSegue.identifier, source: unwindSegue.source, destination: unwindSegue.destination)
         segue.perform()
