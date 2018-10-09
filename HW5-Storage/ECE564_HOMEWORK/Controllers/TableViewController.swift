@@ -159,12 +159,16 @@ class TableViewController: UITableViewController, PassDataBack {
             let ta1: DukePerson = DukePerson(firstName: "Walker", lastName: "Eacho", whereFrom: "Chevy Chase, MD", gender: .Male, degree: "BS", bestProgrammingLanguage: ["Swift", "Objective-C", "C"], hobbies: ["Sailing", "Climbing", "Baking"], role: .TA, team: "")
             let ta2: DukePerson = DukePerson(firstName: "Niral", lastName: "Shah", whereFrom: "Central New Jersey", gender: .Male, degree: "MENG", bestProgrammingLanguage: ["Swift", "Python", "C"], hobbies: ["Computer Vision projects", "Tennis", "Traveling"], role: .TA, team: "")
             let teammate1: DukePerson = DukePerson(firstName: "Haohong", lastName: "Zhao", whereFrom: "China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Java"], hobbies: ["Running", "Swimming"], role: .Student, team: "MoveIt")
+            let teammate2: DukePerson = DukePerson(firstName: "Wenchao", lastName: "Zhu", whereFrom: "China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "C++"], hobbies: ["Swimming", "Tennis", "Driving"], role: .Student, team: "MoveIt")
+            let teammate3: DukePerson = DukePerson(firstName: "Zi", lastName: "Xiong", whereFrom: "China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "Java"], hobbies: ["Coding", "Reading", "Watching Japanese TV series"], role: .Student, team: "MoveIt")
             
             self.people.append(professor)
             self.people.append(ta1)
             self.people.append(ta2)
             self.people.append(myself)
             self.people.append(teammate1)
+            self.people.append(teammate2)
+            self.people.append(teammate3)
             
             savePeopleData()
         }
@@ -176,7 +180,7 @@ class TableViewController: UITableViewController, PassDataBack {
             saveTeamsData()
         }
         
-        peopleArray = [[], []] // clear the array to prevent duplicate people after return from searching
+        peopleArray = [[], []] // reset the array to prevent duplicate people after return from searching
         
         // search through teamsData to determine how many teams are present
         let numOfTeams = self.teams.values.max()! - 1
