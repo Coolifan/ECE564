@@ -70,7 +70,7 @@ class TableViewController: UITableViewController, PassDataBack {
     
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if peopleArray[indexPath.section].isEmpty && indexPath.row == 0 && indexPath.section > 1 { // hide the separator cell as well
+        if peopleArray[indexPath.section].isEmpty && indexPath.row == 0 { // hide the separator cell as well
             return CGFloat(0.0)
         } else if !peopleArray[indexPath.section].isEmpty && indexPath.row == 0 { // normal separator cell
             return CGFloat(44.0)
@@ -176,11 +176,14 @@ class TableViewController: UITableViewController, PassDataBack {
             saveTeamsData()
         }
         
+        peopleArray = [[], []] // clear the array to prevent duplicate people after return from searching
+        
         // search through teamsData to determine how many teams are present
         let numOfTeams = self.teams.values.max()! - 1
         for _ in 0..<numOfTeams { // and allocate enough space to prevent index out of range error
             peopleArray.append([])
         }
+        
         
         for person in self.people {
             if person.role == .Professor {
@@ -372,5 +375,33 @@ class TableViewController: UITableViewController, PassDataBack {
         self.tableView.reloadData()
     }
     
+    
+}
+
+//MARK: Search Bar Methods
+
+extension TableViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        stride(from: self.peopleArray.count-1, through: 0, by: -1).forEach { (i) in
+            stride(from: self.peopleArray[i].count-1, through: 0, by: -1).forEach({ (j) in
+                if peopleArray[i][j].fullName.range(of: searchBar.text!, options: .caseInsensitive) == nil
+                && peopleArray[i][j].degree.uppercased() != searchBar.text!.uppercased()
+                && peopleArray[i][j].team.range(of: searchBar.text!, options: .caseInsensitive) == nil {
+                    peopleArray[i].remove(at: j)
+                }
+            })
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadInitialData()
+            tableView.reloadData()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
     
 }

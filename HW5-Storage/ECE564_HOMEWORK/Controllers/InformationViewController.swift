@@ -44,7 +44,7 @@ class InformationViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         // Flip button is only available to myself
-        if firstNameTextField.text != "Yifan" && lastNameTextField.text != "Li" {
+        if firstNameTextField.text != "Yifan" || lastNameTextField.text != "Li" {
             flipButton.isHidden = true
             flipButton.isEnabled = false
         }
@@ -52,9 +52,13 @@ class InformationViewController: UIViewController {
         // change the navigation bar button item color
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
-        // Dismiss the keyboard when tapped outside the text fields
+        // Dismiss the keyboard when tapped outside the text fields or return key
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
         self.view.addGestureRecognizer(tapGesture)
+        fromTextField.delegate = self
+        hobbiesTextField.delegate = self
+        languagesTextField.delegate = self
+        teamTextField.delegate = self
     }
     
     
@@ -147,7 +151,7 @@ class InformationViewController: UIViewController {
             return true
         }
     
-        self.person.whereFrom = self.fromTextField.text!
+        self.person.whereFrom = (self.fromTextField.text!).trimmingCharacters(in: .whitespaces)
         self.person.gender = (self.genderSC.selectedSegmentIndex == 0) ? .Male : .Female
         
         switch self.roleSC.selectedSegmentIndex {
@@ -159,7 +163,7 @@ class InformationViewController: UIViewController {
             self.person.role = .Student
         }
 
-        self.person.team = (self.person.role == .Student) ? self.teamTextField.text! : ""
+        self.person.team = (self.person.role == .Student) ? (self.teamTextField.text!).trimmingCharacters(in: .whitespaces) : ""
         
         switch self.degreeSC.selectedSegmentIndex {
         case 0:
@@ -176,14 +180,14 @@ class InformationViewController: UIViewController {
             self.person.degree = "other"
         }
         
-        let hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ",").filter({$0 != ""})
+        let hobbies: [String] = (hobbiesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
         if hobbies.count > 3 {
             displayAlertMessage(title: "ERROR!", message: "Up to 3 hobbies!")
             return true
         }
         self.person.hobbies = hobbies
         
-        let languages: [String] = languagesTextField.text!.components(separatedBy: ",").filter({$0 != ""})
+        let languages: [String] = (languagesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
         if languages.count > 3 {
             displayAlertMessage(title: "ERROR!", message: "Up to 3 languages!")
             return true
@@ -230,4 +234,11 @@ class InformationViewController: UIViewController {
     }
     
     
+}
+
+extension InformationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

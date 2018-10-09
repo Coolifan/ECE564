@@ -1,33 +1,42 @@
-## ECE 564 
+## HW5 - Storage
 
-### HW5 - Storage
+**Features highlight:**
 
-**Features highlight**
+\*`PropertyListEncoder` is used to encode and decode the data.
 
-\*PropertyListEncoder is used to encode and decode the data.
+\*Search bar is added to the main table view. The search bar currently supports case-insensitive searching for all matched people given: 
+1. Any part of an input first name or last name. 
+2. Any part of an input team name (only applicable to students). 
+3. A specified degree (MS, Meng, BS, PhD, other, and NA). 
 
-\*Segmented controls are used to replace the original UITextFields for input gender, role, and degree information.
+Clear the input on the search bar to return to the original table view.
 
-\*Pop-up messages (UIAlertController) are used to display the error messages when invalid user input is detected.
+\*Segmented controls (`UISegmentedControl`) are used to replace the original UITextFields for input gender, role, and degree information.
 
-\*Keyboard is dismissed when the user clicks anywhere outside the input text fields.
+\*Pop-up messages (`UIAlertController`) are used to display the error messages when invalid user input is detected.
+
+\*Keyboard is dismissed when the user clicks anywhere outside the input text fields or taps the return key.
 
 \*UI improvements, including a customized fancy transition animation is added to the segue between the information view and the drawing view, and additional colors, fonts, and images.
 
-**Notes**
+\*More strict error checking, including unintentional extra whitespaces checking and input case-sensitive checking. For example, if "Michael Jackson" is already in the class, neither "michael jackson" (and other similar input with same letters but different upper/lower cases) nor "Michael Jackson     " (and other similar input that has leading and trailing whitespaces) would be added to the class since these inputs are considered as the duplicates.
 
-\*The App is built with Xcode 10, and was tested on an iPhone 6/7/8 simulator
+**Notes:**
 
-\*It is assumed that 'team' input is only applicable to students. 
+\*The App is built with Xcode 10, and was tested on an iPhone 6/7/8 simulator.
 
-\*It is assumed that the professor section and TA section would not be deleted, so the functionality of swiping left to delete a cell within the professor's section or the TAs' section is disabled.
+\*It is assumed that 'team' input is **only applicable to students**. 
 
-\*Based on my data structure used, the teams displayed in the table are able to maintain an persistent ordering that is sorted by the creation time of each team, i.e. the earlier a given team is created, the earlier that team will be displayed in the table.
+\*It is assumed that the professor section and TA section would not be deleted, so the functionality of swiping left to delete a cell within the professor's section or the TAs' section is **disabled**.
+
+\*It is assumed that once successfully added to the class, the name of a person **cannot** be modified.
+
+\*Based on my data structure used, the teams displayed in the table are able to maintain a persistent ordering that is sorted by the creation time of each team, i.e. the earlier a given team is created, the earlier that team will be displayed in the table.
 
 
 
 
-### HW4 - Graphics
+## HW4 - Graphics
 
 \* Refactored all HWs on Oct. 3
 
@@ -40,7 +49,7 @@
 
 
 
-### HW3 - Table VC
+## HW3 - Table VC
 
 **Extra features added:**
 
@@ -58,7 +67,7 @@
 
 
 
-### HW2 - View
+## HW2 - View
 
 **Features added:**
 
@@ -78,7 +87,7 @@ Also, the maximum number of hobbies and programming languages is 3.
 
 
 
-### HW1 - Playground
+## HW1 - Playground
 
 
 **Features added:**

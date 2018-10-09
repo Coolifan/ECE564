@@ -36,9 +36,15 @@ class AddViewController: UIViewController {
         self.newPerson.role = .Student
         self.newPerson.degree = "MS"
         
-        // Dismiss the keyboard when tapped outside text fields
+        // Dismiss the keyboard when tapped outside text fields or return key
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
         self.view.addGestureRecognizer(tapGesture)
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        fromTextField.delegate = self
+        hobbiesTextField.delegate = self
+        languagesTextField.delegate = self
+        teamTextField.delegate = self
     }
     
     @IBAction func genderSCTapped(_ sender: UISegmentedControl) {
@@ -104,7 +110,7 @@ class AddViewController: UIViewController {
     // Get and check all inputs. Return true if there is an error
     func getPersonalInformation() -> Bool {
         for person in self.people {
-            if (person.lastName == self.lastNameTextField.text) && (person.firstName == self.firstNameTextField.text) {
+            if (person.lastName.uppercased() == self.lastNameTextField.text?.uppercased().trimmingCharacters(in: .whitespaces)) && (person.firstName.uppercased() == self.firstNameTextField.text?.uppercased().trimmingCharacters(in: .whitespaces)) {
                 // Check if duplicate
                 displayAlertMessage(title: "ERROR!", message: "\(person.firstName) \(person.lastName) is already in the class!")
                 return true
@@ -115,14 +121,14 @@ class AddViewController: UIViewController {
             displayAlertMessage(title: "ERROR!", message: "All fields are required!")
             return true
         }
-        
-        self.newPerson.firstName = self.firstNameTextField.text!
-        self.newPerson.lastName = self.lastNameTextField.text!
-        self.newPerson.whereFrom = self.fromTextField.text!
+    
+        self.newPerson.firstName = (self.firstNameTextField.text!).trimmingCharacters(in: .whitespaces)
+        self.newPerson.lastName = (self.lastNameTextField.text!).trimmingCharacters(in: .whitespaces)
+        self.newPerson.whereFrom = (self.fromTextField.text!).trimmingCharacters(in: .whitespaces)
         self.newPerson.fullName = self.newPerson.firstName + " " + self.newPerson.lastName
-        self.newPerson.team = self.teamTextField.text!
+        self.newPerson.team = (self.teamTextField.text!).trimmingCharacters(in: .whitespaces)
         
-        var hobbies: [String] = hobbiesTextField.text!.components(separatedBy: ",").filter({$0 != ""})
+        var hobbies: [String] = (hobbiesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
         if hobbies.count > 1 {
             for i in 1..<hobbies.count {
                 hobbies[i] = " " + hobbies[i]
@@ -134,7 +140,7 @@ class AddViewController: UIViewController {
         }
         self.newPerson.hobbies = hobbies
         
-        var languages: [String] = languagesTextField.text!.components(separatedBy: ",").filter({$0 != ""})
+        var languages: [String] = (languagesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
         if languages.count > 1 {
             for i in 1..<languages.count {
                 languages[i] = " " + languages[i]
@@ -167,5 +173,13 @@ class AddViewController: UIViewController {
         hobbiesTextField.endEditing(true)
         languagesTextField.endEditing(true)
         teamTextField.endEditing(true)
+    }
+    
+}
+
+extension AddViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
