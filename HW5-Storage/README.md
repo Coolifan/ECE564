@@ -9,7 +9,7 @@
 2. Any part of an input team name (only applicable to students). 
 3. A specified degree (MS, Meng, BS, PhD, other, and NA). 
 
-Clear the input on the search bar to return to the original table view.
+Clear the input on the search bar to return to the original table view. You can also delete a person cell from the search results.
 
 \*Segmented controls (`UISegmentedControl`) are used to replace the original UITextFields for input gender, role, and degree information.
 
