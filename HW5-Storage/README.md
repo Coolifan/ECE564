@@ -16,6 +16,8 @@
 
 **Notes**
 
+\*The App is built with Xcode 10, and was tested on an iPhone 6/7/8 simulator
+
 \*It is assumed that 'team' input is only applicable to students. 
 
 \*It is assumed that the professor section and TA section would not be deleted, so the functionality of swiping left to delete a cell within the professor's section or the TAs' section is disabled.

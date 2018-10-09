@@ -235,7 +235,7 @@ class TableViewController: UITableViewController, PassDataBack {
             let peopleData = try encoder.encode(self.people)
             try peopleData.write(to: peopleDataFilePath!)
         } catch {
-            print("Error encoding people data, \(error)")
+            print("Error saving people data, \(error)")
         }
     }
     
