@@ -1,5 +1,29 @@
 ## ECE 564 
 
+### HW5 - Storage
+
+**Features highlight**
+
+\*PropertyListEncoder is used to encode and decode the data.
+
+\*Segmented controls are used to replace the original UITextFields for input gender, role, and degree information.
+
+\*Pop-up messages (UIAlertController) are used to display the error messages when invalid user input is detected.
+
+\*Keyboard is dismissed when the user clicks anywhere outside the input text fields.
+
+\*UI improvements, including a customized fancy transition animation is added to the segue between the information view and the drawing view, and additional colors, fonts, and images.
+
+**Notes**
+
+\*It is assumed that 'team' input is only applicable to students. 
+
+\*It is assumed that the professor section and TA section would not be deleted, so the functionality of swiping left to delete a cell within the professor's section or the TAs' section is disabled.
+
+\*Based on my data structure used, the teams displayed in the table are able to maintain an persistent ordering that is sorted by the creation time of each team, i.e. the earlier a given team is created, the earlier that team will be displayed in the table.
+
+
+
 
 ### HW4 - Graphics
 
