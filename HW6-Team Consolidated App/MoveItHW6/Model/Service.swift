@@ -71,7 +71,7 @@ struct Service {
         }
     }
 }
-
+//MARK: - JSONDukePerson | DukePerson to JSONDukePerson: Upload
 struct JSONDukePerson: Codable {
     var firstname: String
     var lastname: String
@@ -138,11 +138,11 @@ struct JSONDukePerson: Codable {
         hobbies = p.hobbies
         languages = p.bestProgrammingLanguage
         team = p.team
-        pic = "SOMEPIC"
+        pic = p.pic
         self.uid = uid
     }
 }
-
+//MARK: - JSONDukePerson decode: Download
 extension JSONDukePerson {
     init(from decoder: Decoder) throws {
         self.init()
@@ -172,9 +172,7 @@ extension JSONDukePerson {
         }
     }
 }
-
-
-
+//MARK: - JSONDukePerson to DukePerson: Download
 extension DukePerson {
     
     var roleDic: [String: DukeRole] {
@@ -197,6 +195,7 @@ extension DukePerson {
         degree = jsonP.degree
         hobbies = jsonP.hobbies
         bestProgrammingLanguage = jsonP.languages
+        pic = jsonP.pic ?? ""
         team = jsonP.team ?? ""
     }
 }

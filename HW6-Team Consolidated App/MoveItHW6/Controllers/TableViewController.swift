@@ -42,37 +42,62 @@ class TableViewController: UITableViewController, PassDataBack {
 //        print(teamsDataFilePath)
     }
     
+    //    MARK: - handle upload
     @objc private func handleUpload() {
         print("Trying to upload 4 team members to the server..")
-        let myself: DukePerson = DukePerson(firstName: "Yifan", lastName: "Li", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Python"], hobbies: ["Playing soccer", "Playing online games", "Cardio workout"], role: .Student, team: "MoveIt")
-        let teammate1: DukePerson = DukePerson(firstName: "Haohong", lastName: "Zhao", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Java"], hobbies: ["Running", "Swimming"], role: .Student, team: "MoveIt")
-        let teammate2: DukePerson = DukePerson(firstName: "Wenchao", lastName: "Zhu", whereFrom: "Wuxi, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "C++"], hobbies: ["Swimming", "Tennis", "Driving"], role: .Student, team: "MoveIt")
-        let teammate3: DukePerson = DukePerson(firstName: "Zi", lastName: "Xiong", whereFrom: "Nanjing, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "Java"], hobbies: ["Coding", "Reading", "Watching Japanese TV series"], role: .Student, team: "MoveIt")
-        
-        let teammates = [
-            myself,
-            teammate1,
-            teammate2,
-            teammate3
-        ]
-        
+        let teammates = getTeammates()
         let uids = [
             26,
             15,
             24,
             8
         ]
-        
         for (index, teammate) in teammates.enumerated() {
             let uid = uids[index]
             Service.shared.uploadDukePersonToServer(DukePerson: teammate, uid: uid)
         }
     }
     
+    fileprivate func getTeammates() -> [DukePerson] {
+        let names = [
+            "Yifan Li",
+            "Haohong Zhao",
+            "Wenchao Zhu",
+            "Zi Xiong"
+        ]
+        let teammateInfos = getTeammateInfos()
+        var teammates = [DukePerson]()
+        names.forEach { (name) in
+            //TODO: - when server is ready for pics, activate this snippet and comment the last line
+            
+            //            let persons = people.filter({ (person) -> Bool in
+            //                return person.fullName == name
+            //            })
+            //            teammates.append(persons.first ?? teammateInfos[name]!)
+            teammates.append(teammateInfos[name]!)
+        }
+        return teammates
+    }
+    
+    fileprivate func getTeammateInfos() -> [String: DukePerson] {
+        var teammateInfos = [String: DukePerson]()
+        let yifan: DukePerson = DukePerson(firstName: "Yifan", lastName: "Li", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Python"], hobbies: ["Playing soccer", "Playing online games", "Cardio workout"], role: .Student, team: "MoveIt")
+        let haohong: DukePerson = DukePerson(firstName: "Haohong", lastName: "Zhao", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Java"], hobbies: ["Running", "Swimming"], role: .Student, team: "MoveIt")
+        let wenchao: DukePerson = DukePerson(firstName: "Wenchao", lastName: "Zhu", whereFrom: "Wuxi, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "C++"], hobbies: ["Swimming", "Tennis", "Driving"], role: .Student, team: "MoveIt")
+        let zi: DukePerson = DukePerson(firstName: "Zi", lastName: "Xiong", whereFrom: "Nanjing, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "Java"], hobbies: ["Coding", "Reading", "Watching Japanese TV series"], role: .Student, team: "MoveIt")
+        teammateInfos["Yifan Li"] = yifan
+        teammateInfos["Haohong Zhao"] = haohong
+        teammateInfos["Wenchao Zhu"] = wenchao
+        teammateInfos["Zi Xiong"] = zi
+        teammateInfos.forEach { (teammateInfo) in
+            teammateInfo.value.pic = "SOMEPIC"
+        }
+        return teammateInfos
+    }
+    //    MARK: - handle download
     @objc private func handleDownload() {
         Service.shared.downloadDukePersonsFromServer(tableViewController: self)
     }
-
     
     // MARK: - TableView Data Source
     
