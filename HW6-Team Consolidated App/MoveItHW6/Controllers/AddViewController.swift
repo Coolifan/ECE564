@@ -29,9 +29,11 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
     
     
     @IBOutlet weak var avatarImageView: UIImageView!
+    var browseButton: UIButton!
     
     var errorOccurred: Bool = false
     var cancelPressed: Bool = false
+    var hasNewAvatar: Bool = false
     var newPerson = DukePerson()
     var people = [DukePerson]()
     
@@ -46,6 +48,16 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
         avatarImageView.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.takePic))
         avatarImageView.addGestureRecognizer(tapRecognizer)
+        
+        // button for browsinng local Photo Library
+        browseButton = UIButton(frame: CGRect(x: (self.view.bounds.width - 60) / 2, y: self.view.bounds.height - 65, width: 60, height: 20))
+        browseButton.backgroundColor = UIColor(red: 48/255, green: 123/255, blue:246/255, alpha: 0.9)
+        browseButton.layer.cornerRadius = 9
+        browseButton.setTitle("Browse", for: .normal)
+        browseButton.setTitleColor(UIColor.white, for: .normal)
+        browseButton.titleLabel!.font = UIFont(name: "Helvetica Light", size: 12.0)
+        browseButton.addTarget(self, action: #selector(InformationViewController.browsePhotos(_:)), for: .touchUpInside)
+        self.view.addSubview(browseButton)
         
         firstNameTextField.delegate = self
         lastNameTextField.delegate = self
@@ -73,9 +85,20 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
             }
         }
     }
+
+    // browse local photos library
+    @objc func browsePhotos(_ sender: UIButton!) {
+        print("Select Picture")
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        
+        self.present(picker, animated: true, completion: nil)
+    }
     
     //  MARK:  takePic
     @objc func takePic(_ sender: AnyObject) {
+        hasNewAvatar = true
         print("Add Picture")
         let cam = UIImagePickerController.SourceType.camera
         let ok = UIImagePickerController.isSourceTypeAvailable(cam)
@@ -104,8 +127,8 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
         if let error = error {
             // an error in the save process
             displayAlertMessage(title: "Save error", message: error.localizedDescription)
-        } else {
-            displayAlertMessage(title: "Saved!", message: "Your image has been saved to your photos.")
+        } else if hasNewAvatar {
+            displayAlertMessage(title: "Saved!", message: "Your image has been saved.")
         }
     }
     
@@ -157,7 +180,9 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
             return
         }
         else {
-            UIImageWriteToSavedPhotosAlbum(self.avatarImageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+            if hasNewAvatar {
+                UIImageWriteToSavedPhotosAlbum(self.avatarImageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+            }
         }
     }
     
@@ -216,6 +241,12 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
         }
         self.newPerson.bestProgrammingLanguage = languages
         
+        // save avatar as base64 string
+        if hasNewAvatar {
+            let imgData: Data = self.avatarImageView.image!.jpegData(compressionQuality: 1.0)!
+            self.newPerson.pic = imgData.base64EncodedString(options: .endLineWithLineFeed)
+        }
+
         // until this point, all inputs are valid, no error occurred.
         return false
     }

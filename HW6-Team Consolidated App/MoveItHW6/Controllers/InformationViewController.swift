@@ -22,6 +22,7 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
     var peopleWithDrawingAnimations = [String]()
     
     var errorOccurred: Bool = false
+    var hasNewAvatar: Bool = false
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var fromTextField: UITextField!
@@ -34,6 +35,7 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
     @IBOutlet weak var degreeSC: UISegmentedControl!
     
     @IBOutlet weak var avatarImageView: UIImageView!
+    var browseButton: UIButton!
     
     @IBOutlet weak var flipButton: UIButton!
     @IBAction func flipButtonPressed(_ sender: Any) {
@@ -42,6 +44,7 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //WARNING: setupDegreeSC() HAS TO be called before loadPersonalInformation()
         setupDegreeSC()
         loadPersonalInformation()
@@ -51,6 +54,18 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         // Camera
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.takePic))
         avatarImageView.addGestureRecognizer(tapRecognizer)
+        
+        // button for browsinng local Photo Library
+        browseButton = UIButton(frame: CGRect(x: (self.view.bounds.width - 60) / 2, y: self.view.bounds.height - 65, width: 60, height: 20))
+        browseButton.backgroundColor = UIColor(red: 48/255, green: 123/255, blue:246/255, alpha: 0.9)
+        browseButton.layer.cornerRadius = 9
+        browseButton.setTitle("Browse", for: .normal)
+        browseButton.setTitleColor(UIColor.white, for: .normal)
+        browseButton.titleLabel!.font = UIFont(name: "Helvetica Light", size: 12.0)
+        browseButton.addTarget(self, action: #selector(InformationViewController.browsePhotos(_:)), for: .touchUpInside)
+        self.view.addSubview(browseButton)
+        browseButton.isEnabled = false
+        browseButton.isHidden = true
         
         // Flip button is only available to peopleWithDrawingAnimations
         let peopleWithDrawingAnimations = Set<String>(self.peopleWithDrawingAnimations)
@@ -90,8 +105,19 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         }
     }
     
+    // browse local photos library
+    @objc func browsePhotos(_ sender: UIButton!) {
+        print("Select Picture")
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        
+        self.present(picker, animated: true, completion: nil)
+    }
+    
     //  MARK:  takePic
     @objc func takePic(_ sender: AnyObject) {
+        hasNewAvatar = true
         print("Add Picture")
         let cam = UIImagePickerController.SourceType.camera
         let ok = UIImagePickerController.isSourceTypeAvailable(cam)
@@ -120,7 +146,7 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         if let error = error {
             // an error in the save process
             displayAlertMessage(title: "Save error", message: error.localizedDescription)
-        } else {
+        } else if hasNewAvatar {
             displayAlertMessage(title: "Saved!", message: "Your image has been saved to your photos.")
         }
     }
@@ -154,6 +180,8 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         if editing {
             // edit mode
             toggleUserInteraction(ifEnabled: true)
+            self.browseButton.isEnabled = true
+            browseButton.isHidden = false
             self.firstNameTextField.textColor = UIColor.gray
             self.lastNameTextField.textColor = UIColor.gray
             let saveButton = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.saveButtonPressed(sender:)))
@@ -168,7 +196,9 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
     @objc func saveButtonPressed(sender: UIBarButtonItem) {
         errorOccurred = getPersonalInformation()
         if errorOccurred == false {
-            UIImageWriteToSavedPhotosAlbum(self.avatarImageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+            if hasNewAvatar {
+                UIImageWriteToSavedPhotosAlbum(self.avatarImageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+            }
             delegate?.dataReceived(personEdited: self.person)
             navigationController?.popViewController(animated: true)
         } else {
@@ -184,8 +214,15 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         self.fromTextField.text = person.whereFrom
         self.hobbiesTextField.text = person.hobbies.joined(separator: ", ")
         self.languagesTextField.text = person.bestProgrammingLanguage.joined(separator: ", ")
-        self.avatarImageView.image = (person.gender == .Male) ? UIImage(named: "male.png") : UIImage(named: "female.png")
         self.genderSC.selectedSegmentIndex = (person.gender == .Male) ? 0 : 1
+        
+        if person.pic != "", let imgData = Data(base64Encoded: person.pic, options: .ignoreUnknownCharacters) {
+            self.avatarImageView.image = UIImage(data: imgData)
+        }
+        else {
+            self.avatarImageView.image = (person.gender == .Male) ? UIImage(named: "male.png") : UIImage(named: "female.png")
+        }
+
         
         switch person.role {
         case .Professor:
@@ -286,6 +323,10 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
             return true
         }
         self.person.bestProgrammingLanguage = languages
+        
+        // save avatar as base64 string
+        let imgData: Data = self.avatarImageView.image!.jpegData(compressionQuality: 1.0)!
+        self.person.pic = imgData.base64EncodedString(options: .endLineWithLineFeed)
         
         // until this point, all inputs are valid, no error occurred.
         return false

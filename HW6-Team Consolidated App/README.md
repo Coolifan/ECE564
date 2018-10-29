@@ -18,7 +18,10 @@
 4. It is assumed that once a person was successfully added to the class, his name cannot be modified in the Information View.
 5. It is assumed that the degree information has 6 default options: MS, PhD, BS, MENG, NA, and other. Any other input of degree information downloaded from the server that does not belong to one of the 6 default options will have its own string displayed.
 6. Download button and Upload button are used to communicate with the server. Data communication does not include images/avatars.
-
+7. To add the avatar, there are two ways: take a new photo or select from local photos library. 
+   - Click the Edit button on the top of the InformationViewController, then the image-taken button and the Browse button can show up and you will be able to change the current avatar.
+   - Click the imageview at the bottom of the AddViewController or InformationViewController (there is also a default avatar image for male and female respectively), and then it will go to the default picture-taking page using the front camera of iPhone (new photos will be stored in both local disk and the photos library).
+   - Click the 'Browse' button at the bottom of the AddViewController or InformationViewController, and then it will go to the Photos Library for the user to choose on image as their avatar.
 
 ##
 **Update History:**

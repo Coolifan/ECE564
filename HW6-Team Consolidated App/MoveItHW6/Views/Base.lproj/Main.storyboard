@@ -766,7 +766,7 @@
         <!--Wenchao Animation Controller-->
         <scene sceneID="PeB-GU-OWx">
             <objects>
-                <viewController storyboardIdentifier="TransformViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ret-fp-tqd" customClass="WenchaoAnimationController" customModule="ECE564_HOMEWORK" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TransformViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ret-fp-tqd" customClass="WenchaoAnimationController" customModule="MoveItHW6" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="24o-6u-bpd"/>
                         <viewControllerLayoutGuide type="bottom" id="51I-mk-DuX"/>
@@ -833,7 +833,7 @@
         <image name="ECE_Logo" width="795" height="109"/>
         <image name="grass" width="1725" height="1159"/>
         <image name="kevin" width="432" height="768"/>
-        <image name="newPerson" width="46.428211212158203" height="46.428211212158203"/>
+        <image name="newPerson" width="512" height="512"/>
         <image name="soccer" width="340" height="340"/>
     </resources>
 </document>

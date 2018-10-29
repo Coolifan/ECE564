@@ -3,7 +3,7 @@
 //  ECE564_HOMEWORK
 //
 //  Created by Yifan Li on 10/3/18.
-//  Modified by Haohong Zhao and Yifan Li on 10/28/18.
+//  Modified by Haohong Zhao, Yifan Li and Zi Xiong on 10/28/18.
 //  Copyright © 2018 ece564. All rights reserved.
 //
 
@@ -43,6 +43,7 @@ class DukePerson: BlueDevil, CustomStringConvertible, Codable {
       return "\(firstName) \(lastName)"
     }
     var team: String = ""
+    var pic: String = ""
     
     // originally fro Person class
     var firstName = "First"

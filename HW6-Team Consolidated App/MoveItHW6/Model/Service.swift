@@ -3,6 +3,7 @@
 //  HW6_JSON
 //
 //  Created by Haohong Zhao on 10/22/18.
+//  Modified by Zi Xiong on 10/28/18.
 //  Copyright © 2018 Haohong Zhao. All rights reserved.
 //
 
@@ -180,6 +181,7 @@ extension DukePerson {
         let dic: [String: DukeRole] = [
             "Professor": .Professor,
             "TA": .TA,
+            "Teaching Assistant": .TA,
             "Student": .Student
         ]
         return dic
