@@ -217,24 +217,16 @@ class AddViewController: UIViewController, UINavigationControllerDelegate, UIIma
         self.newPerson.whereFrom = (self.fromTextField.text!).trimmingCharacters(in: .whitespaces)
         self.newPerson.team = (self.teamTextField.text!).trimmingCharacters(in: .whitespaces)
         
-        var hobbies: [String] = (hobbiesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
-        if hobbies.count > 1 {
-            for i in 1..<hobbies.count {
-                hobbies[i] = " " + hobbies[i]
-            }
-        }
+        let hobbies: [String] = (hobbiesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
+
         if hobbies.count > 3 {
             displayAlertMessage(title: "ERROR!", message: "Up to 3 hobbies!")
             return true
         }
         self.newPerson.hobbies = hobbies
         
-        var languages: [String] = (languagesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
-        if languages.count > 1 {
-            for i in 1..<languages.count {
-                languages[i] = " " + languages[i]
-            }
-        }
+        let languages: [String] = (languagesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})
+
         if languages.count > 3 {
             displayAlertMessage(title: "ERROR!", message: "Up to 3 languages!")
             return true

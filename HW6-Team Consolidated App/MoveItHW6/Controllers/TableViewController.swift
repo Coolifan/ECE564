@@ -3,7 +3,7 @@
 //  ECE564_HOMEWORK
 //
 //  Created by Yifan Li on 10/3/18.
-//  Modified by Haohong Zhao and Yifan Li on 10/27/18.
+//  Modified by Haohong Zhao, Yifan Li and Zi Xiong on 10/31/18.
 //  Copyright © 2018 ece564. All rights reserved.
 //
 
@@ -15,12 +15,8 @@ class TableViewController: UITableViewController, PassDataBack {
     var teams: [String: Int] = [:] //Dictionary used for linking between teams and their sections in table, will be saved/loaded
     var peopleArray: [[DukePerson]] = [[], []] //for easier alignment with tableViewCell indices (indexPath.section & row)
     var studentsWithNoTeams: [DukePerson] = [] //Array of DukePersons with no teams
-    
-    
-    //ATTENTION: Array of people who have drawing animations
+    // Drawing/Animation views are only applicable to our team members
     var peopleWithDrawingAnimations: [String] = ["Yifan Li" , "Haohong Zhao", "Zi Xiong", "Wenchao Zhu"]
-    //Append your full name to the array if you want to add your own drawing animation!
-    
     
     let peopleDataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("People.plist")
     let teamsDataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Teams.plist")
@@ -46,16 +42,19 @@ class TableViewController: UITableViewController, PassDataBack {
     @objc private func handleUpload() {
         print("Trying to upload 4 team members to the server..")
         let teammates = getTeammates()
-        let uids = [
-            26,
-            15,
-            24,
-            8
+        let moveit: [String: Int] = [
+            "Yifan Li": 26,
+            "Haohong Zhao": 15,
+            "Wenchao Zhu": 24,
+            "Zi Xiong": 8
         ]
-        for (index, teammate) in teammates.enumerated() {
-            let uid = uids[index]
-            Service.shared.uploadDukePersonToServer(DukePerson: teammate, uid: uid)
+        
+        for person in teammates {
+            if let uid = moveit[person.fullName] {
+                Service.shared.uploadDukePersonToServer(DukePerson: person, uid: uid)
+            }
         }
+        
     }
     
     fileprivate func getTeammates() -> [DukePerson] {
@@ -65,42 +64,26 @@ class TableViewController: UITableViewController, PassDataBack {
             "Wenchao Zhu",
             "Zi Xiong"
         ]
-        let teammateInfos = getTeammateInfos()
+        
         var teammates = [DukePerson]()
         names.forEach { (name) in
-            //TODO: - when server is ready for pics, activate this snippet and comment the last line
-            
-            //            let persons = people.filter({ (person) -> Bool in
-            //                return person.fullName == name
-            //            })
-            //            teammates.append(persons.first ?? teammateInfos[name]!)
-            teammates.append(teammateInfos[name]!)
+            let persons = people.filter({ (person) -> Bool in
+                return person.fullName == name
+            })
+            if !(persons.isEmpty) {
+                teammates.append(persons.first!)
+            }
         }
+        
         return teammates
     }
     
-    fileprivate func getTeammateInfos() -> [String: DukePerson] {
-        var teammateInfos = [String: DukePerson]()
-        let yifan: DukePerson = DukePerson(firstName: "Yifan", lastName: "Li", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Python"], hobbies: ["Playing soccer", "Playing online games", "Cardio workout"], role: .Student, team: "MoveIt")
-        let haohong: DukePerson = DukePerson(firstName: "Haohong", lastName: "Zhao", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Java"], hobbies: ["Running", "Swimming"], role: .Student, team: "MoveIt")
-        let wenchao: DukePerson = DukePerson(firstName: "Wenchao", lastName: "Zhu", whereFrom: "Wuxi, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "C++"], hobbies: ["Swimming", "Tennis", "Driving"], role: .Student, team: "MoveIt")
-        let zi: DukePerson = DukePerson(firstName: "Zi", lastName: "Xiong", whereFrom: "Nanjing, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["Swift", "Python", "Java"], hobbies: ["Coding", "Reading", "Watching Japanese TV series"], role: .Student, team: "MoveIt")
-        teammateInfos["Yifan Li"] = yifan
-        teammateInfos["Haohong Zhao"] = haohong
-        teammateInfos["Wenchao Zhu"] = wenchao
-        teammateInfos["Zi Xiong"] = zi
-        teammateInfos.forEach { (teammateInfo) in
-            teammateInfo.value.pic = "SOMEPIC"
-        }
-        return teammateInfos
-    }
-    //    MARK: - handle download
+    // MARK: - handle download
     @objc private func handleDownload() {
         Service.shared.downloadDukePersonsFromServer(tableViewController: self)
     }
     
     // MARK: - TableView Data Source
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return peopleArray.count
     }
@@ -243,7 +226,7 @@ class TableViewController: UITableViewController, PassDataBack {
     }
     
     fileprivate func initPeople() {
-        let myself: DukePerson = DukePerson(firstName: "Yifan", lastName: "Li", whereFrom: "Hebei, China", gender: .Male, degree: "MSB", bestProgrammingLanguage: ["C", "C++", "Python"], hobbies: ["Playing soccer", "Playing online games", "Cardio workout"], role: .Student, team: "MoveIt")
+        let myself: DukePerson = DukePerson(firstName: "Yifan", lastName: "Li", whereFrom: "Hebei, China", gender: .Male, degree: "MS", bestProgrammingLanguage: ["C", "C++", "Python"], hobbies: ["Playing soccer", "Playing online games", "Cardio workout"], role: .Student, team: "MoveIt")
         let professor: DukePerson = DukePerson(firstName: "Ric", lastName: "Telford", whereFrom: "Morrisville, NC", gender: .Male, degree: "NA", bestProgrammingLanguage: ["Swift", "C", "C++"], hobbies: ["Golf", "Swimming", "Biking"], role: .Professor, team: "")
         let ta1: DukePerson = DukePerson(firstName: "Walker", lastName: "Eacho", whereFrom: "Chevy Chase, MD", gender: .Male, degree: "BS", bestProgrammingLanguage: ["Swift", "Objective-C", "C"], hobbies: ["Sailing", "Climbing", "Baking"], role: .TA, team: "")
         let ta2: DukePerson = DukePerson(firstName: "Niral", lastName: "Shah", whereFrom: "Central New Jersey", gender: .Male, degree: "MENG", bestProgrammingLanguage: ["Swift", "Python", "C"], hobbies: ["Computer Vision projects", "Tennis", "Traveling"], role: .TA, team: "")
@@ -474,7 +457,6 @@ class TableViewController: UITableViewController, PassDataBack {
 }
 
 //MARK: Search Bar Methods
-
 extension TableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         stride(from: self.peopleArray.count-1, through: 0, by: -1).forEach { (i) in

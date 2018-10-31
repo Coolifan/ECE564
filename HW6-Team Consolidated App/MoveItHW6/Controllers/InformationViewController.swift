@@ -45,8 +45,6 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //WARNING: setupDegreeSC() HAS TO be called before loadPersonalInformation()
-        setupDegreeSC()
         loadPersonalInformation()
         self.isEditing = false
         self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -151,27 +149,6 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         }
     }
     
-    //handle unexpected degree
-    private func setupDegreeSC() {
-        if personHasNewDegree() {
-            let numOfSegments = degreeSC.numberOfSegments
-            let newDegree = person.degree
-            degreeSC.insertSegment(withTitle: newDegree, at: numOfSegments, animated: true)
-        }
-    }
-    
-    private func personHasNewDegree() -> Bool {
-        let degreeSet = Set<String>([
-            "MS",
-            "BS",
-            "MENG",
-            "PhD",
-            "NA",
-            "other"
-            ])
-        return !degreeSet.contains(person.degree)
-    }
-    
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         // Toggles the edit button state
@@ -212,7 +189,9 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
         self.firstNameTextField.text = person.firstName
         self.lastNameTextField.text = person.lastName
         self.fromTextField.text = person.whereFrom
+        self.person.hobbies = self.person.hobbies.count > 3 ? Array(self.person.hobbies[0..<3]) : self.person.hobbies
         self.hobbiesTextField.text = person.hobbies.joined(separator: ", ")
+        self.person.bestProgrammingLanguage = self.person.bestProgrammingLanguage.count > 3 ? Array(self.person.bestProgrammingLanguage[0..<3]) : self.person.bestProgrammingLanguage
         self.languagesTextField.text = person.bestProgrammingLanguage.joined(separator: ", ")
         self.genderSC.selectedSegmentIndex = (person.gender == .Male) ? 0 : 1
         
@@ -237,24 +216,22 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
             self.teamTextField.text = person.team
         }
         
-        if personHasNewDegree() {
-            self.degreeSC.selectedSegmentIndex = degreeSC.numberOfSegments - 1
-        } else {
-            switch person.degree {
-            case "MS":
-                self.degreeSC.selectedSegmentIndex = 0
-            case "BS":
-                self.degreeSC.selectedSegmentIndex = 1
-            case "MENG":
-                self.degreeSC.selectedSegmentIndex = 2
-            case "PhD":
-                self.degreeSC.selectedSegmentIndex = 3
-            case "NA":
-                self.degreeSC.selectedSegmentIndex = 4
-            default:
-                self.degreeSC.selectedSegmentIndex = 5
-            }
+
+        switch person.degree {
+        case "MS":
+            self.degreeSC.selectedSegmentIndex = 0
+        case "BS":
+            self.degreeSC.selectedSegmentIndex = 1
+        case "MENG":
+            self.degreeSC.selectedSegmentIndex = 2
+        case "PhD":
+            self.degreeSC.selectedSegmentIndex = 3
+        case "NA":
+            self.degreeSC.selectedSegmentIndex = 4
+        default:
+            self.degreeSC.selectedSegmentIndex = 5
         }
+        
     }
     
     
@@ -304,10 +281,8 @@ class InformationViewController: UIViewController, UINavigationControllerDelegat
             self.person.degree = "PhD"
         case 4:
             self.person.degree = "NA"
-        case 5:
-            self.person.degree = "other"
         default:
-            self.person.degree = self.person.degree //indicates that this person has a newDegree and does not want to change
+            self.person.degree = "other"
         }
         
         let hobbies: [String] = (hobbiesTextField.text!).trimmingCharacters(in: .whitespaces).components(separatedBy: ",").filter({$0 != ""})

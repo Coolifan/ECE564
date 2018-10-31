@@ -15,13 +15,6 @@ enum Gender: String, Codable {
     case Female = "Female"
 }
 
-//class Person: Codable {
-//    var firstName = "First"
-//    var lastName = "Last"
-//    var whereFrom = "Anywhere"  // this is just a free String - can be city, state, both, etc.
-//    var gender : Gender = .Male
-//}
-
 enum DukeRole : String, Codable {
     case Student = "Student"
     case Professor = "Professor"
@@ -45,7 +38,7 @@ class DukePerson: BlueDevil, CustomStringConvertible, Codable {
     var team: String = ""
     var pic: String = ""
     
-    // originally fro Person class
+    // originally from Person class
     var firstName = "First"
     var lastName = "Last"
     var whereFrom = "Anywhere"  // this is just a free String - can be city, state, both, etc.
@@ -54,13 +47,8 @@ class DukePerson: BlueDevil, CustomStringConvertible, Codable {
     init() {
         
     }
-    
-//    override init() {
-//        super.init()
-//    }
 
     init(firstName: String, lastName: String, whereFrom: String, gender: Gender, degree: String, bestProgrammingLanguage: [String], hobbies: [String], role: DukeRole, team: String) {
-        //super.init()
         self.firstName = firstName
         self.lastName = lastName
         self.whereFrom = whereFrom
@@ -72,15 +60,15 @@ class DukePerson: BlueDevil, CustomStringConvertible, Codable {
         self.team = team
     }
     
-
     
     // Add CustomStringConvertible conformance to DukePerson class by defining the description property
     var description: String {
         let (pronoun, courseRole, pronoun2) = getGenderAndRole(self.gender, self.role)
         
         var langStr: String = ""
-        for i in 0..<(self.bestProgrammingLanguage.count) {
-            if i != self.bestProgrammingLanguage.count-1 {
+        let numOfLangs: Int = self.bestProgrammingLanguage.count > 3 ? 3 : self.bestProgrammingLanguage.count
+        for i in 0..<numOfLangs {
+            if i != numOfLangs-1 {
                 langStr += "\(self.bestProgrammingLanguage[i]), "
             } else {
                 langStr += (i != 0) ? "and \(self.bestProgrammingLanguage[i])" : "\(self.bestProgrammingLanguage[i])"
@@ -88,8 +76,9 @@ class DukePerson: BlueDevil, CustomStringConvertible, Codable {
         }
         
         var hobbyStr: String = ""
-        for i in 0..<(self.hobbies.count) {
-            if i != self.hobbies.count-1 {
+        let numOfHobbies: Int = self.hobbies.count > 3 ? 3 : self.hobbies.count
+        for i in 0..<numOfHobbies {
+            if i != numOfHobbies-1 {
                 hobbyStr += "\(self.hobbies[i]), "
             } else {
                 hobbyStr += (i != 0) ? "and \(self.hobbies[i])" : "\(self.hobbies[i])"
