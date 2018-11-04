@@ -1,0 +1,6 @@
+framework module Pods_MoveIt {
+  umbrella header "Pods-MoveIt-umbrella.h"
+
+  export *
+  module * { export * }
+}
