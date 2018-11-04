@@ -1,12 +1,11 @@
 ## Homework 6 - Team Consolidated App
 
 **Team MoveIt members:**
+- Yifan Li
 
 - Haohong Zhao
 
 - Zi Xiong
-
-- Yifan Li
 
 - Wenchao Zhu
 
