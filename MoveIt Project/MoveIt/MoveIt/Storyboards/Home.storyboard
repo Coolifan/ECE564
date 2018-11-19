@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -125,8 +124,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="f0s-YN-PNB">
-                                <rect key="frame" x="0.0" y="74" width="375" height="593"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="f0s-YN-PNB">
+                                <rect key="frame" x="0.0" y="74" width="375" height="442"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BrC-7t-U7w">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
@@ -207,25 +207,28 @@
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="sdX-dH-wzr">
                                         <rect key="frame" x="0.0" y="314" width="375" height="128"/>
                                     </mapView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7fR-0o-vrq">
-                                        <rect key="frame" x="0.0" y="462" width="375" height="131"/>
-                                        <color key="backgroundColor" red="1" green="0.97633437980000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="Button"/>
-                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="f0s-YN-PNB" firstAttribute="bottom" secondItem="5xA-xl-vXH" secondAttribute="bottom" id="WLJ-ko-Z0H"/>
-                            <constraint firstItem="f0s-YN-PNB" firstAttribute="trailing" secondItem="5xA-xl-vXH" secondAttribute="trailing" id="jUA-QP-OgL"/>
-                            <constraint firstItem="f0s-YN-PNB" firstAttribute="leading" secondItem="5xA-xl-vXH" secondAttribute="leading" id="mu6-1Y-CI3"/>
-                            <constraint firstItem="f0s-YN-PNB" firstAttribute="top" secondItem="5xA-xl-vXH" secondAttribute="top" constant="10" id="s8P-aF-BLn"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="5xA-xl-vXH"/>
                     </view>
                     <connections>
-                        <outlet property="stackView" destination="f0s-YN-PNB" id="qKe-jQ-aAz"/>
+                        <outlet property="address" destination="B35-zA-91V" id="gxz-T3-8rB"/>
+                        <outlet property="addressStackView" destination="F0c-ft-bJr" id="E9c-Az-FKI"/>
+                        <outlet property="addressTag" destination="yLv-QP-xye" id="QQ6-U0-uHf"/>
+                        <outlet property="bannerImageView" destination="BrC-7t-U7w" id="KFL-n9-w1w"/>
+                        <outlet property="mainStackView" destination="f0s-YN-PNB" id="qKe-jQ-aAz"/>
+                        <outlet property="mapView" destination="sdX-dH-wzr" id="R0B-3s-J7K"/>
+                        <outlet property="name" destination="FLL-Vh-h22" id="usu-wk-t06"/>
+                        <outlet property="nameStackView" destination="JpP-Of-p5U" id="dHN-de-812"/>
+                        <outlet property="nameTag" destination="Y5F-cU-i3c" id="dj9-IH-1RG"/>
+                        <outlet property="phone" destination="dgU-70-psQ" id="Rus-0X-Onz"/>
+                        <outlet property="phoneStackView" destination="aUH-vG-fuw" id="aRG-Xm-QIT"/>
+                        <outlet property="phoneTag" destination="3xi-T8-mgy" id="wyu-y7-lqY"/>
+                        <outlet property="website" destination="Lx3-Yb-VfJ" id="Bi0-2K-oh0"/>
+                        <outlet property="websiteStackView" destination="Kyo-Ba-xbq" id="rge-XY-nyB"/>
+                        <outlet property="websiteTag" destination="qUy-Kl-zNj" id="eOG-S2-4CJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G1x-l2-6kR" userLabel="First Responder" sceneMemberID="firstResponder"/>

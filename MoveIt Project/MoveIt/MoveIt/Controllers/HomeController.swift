@@ -21,6 +21,12 @@ class HomeController: UIViewController {
         setupUI()
     }
     
+    fileprivate func setupUI() {
+        setupGRButtons()
+        setupBannerButtons()
+    }
+    
+    // Mark: Restaurant Button & Garden Button
     fileprivate func setupGRButtons() {
         rBtn.layer.cornerRadius = 16
         rBtn.backgroundColor = .carrotOrange
@@ -41,17 +47,14 @@ class HomeController: UIViewController {
         performSegue(withIdentifier: "toLocs", sender: gBtn)
     }
     
+    // segue preparation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let btn = sender as? UIButton else { return }
         guard let locsVC = segue.destination as? LocsController else { return }
         locsVC.locationType = (btn === rBtn) ? "restaurant" : "garden"
     }
     
-    fileprivate func setupUI() {
-        setupGRButtons()
-        setupBannerButtons()
-    }
-    
+    // Mark: Goal Banner
     fileprivate func setupBannerButtons() {
         setupBannerButtonsUI()
         arrangeBannerButtons()
@@ -86,7 +89,14 @@ class HomeController: UIViewController {
     
     @objc fileprivate func openGoalView() {
         let goalController = GoalController()
+        goalController.progress = 0.7
         navigationController?.pushViewController(goalController, animated: true)
+        
+        // request access to HealthKit
+        let hkManager = HealthKitManager()
+        hkManager.authorizeHealthKit()
+        hkManager.readHealthData()
+        
     }
 }
 

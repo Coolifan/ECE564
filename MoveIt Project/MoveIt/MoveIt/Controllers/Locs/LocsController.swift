@@ -12,171 +12,266 @@ import CoreLocation
 import SwiftyJSON
 import Alamofire
 
-// Struct for saving restaurant info
-struct restaurantInfo {
+//TODO: - code refactor, names change
+
+// Struct for saving location info
+struct LocationInfo {
     var name: String
     var address: String
-    var rating: Float
-    var priceLevel: Int
+    var imageURLParameters: [String: String]?
+    var placeId: String?
+    var locationType: LocationAnnotation.LocationType
+    var coordinate: CLLocationCoordinate2D
 }
 
 class LocsController: UIViewController, CLLocationManagerDelegate {
     
+    var locationType: String = ""
+    var locationList = [LocationInfo]()
+//    MARK: - GPS location manager
+    let locationManager  = CLLocationManager()
+//    MARK: - storyboard component
     @IBOutlet weak var bannerLabel: UILabel!
     @IBOutlet weak var tableView: UIView!
     
-    var locationType: String = ""
-    
-    // Constants
-    let googlePlaceSearchURL = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-    let API_KEY = "AIzaSyDzi0HPWH371bh1Y96mRNQQhIgroKkQqk4"
-    let locationManager  = CLLocationManager()
-    var restaurantList = [restaurantInfo]()
-    
-    var locs = [
-        Location(name: "Teer"),
-        Location(name: "Hudson Hall"),
-        Location(name: "Bryan Center")
-    ]
-    
+//    MARK: - error display component
+    var footerText: String? {
+        didSet {
+            guard let tableViewController = children.first as? TableViewController else { return }
+            tableViewController.footerText = footerText
+        }
+    }
+//    MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Location manager setup
+        setupUI()
+        setupLocationManager()
+        setupTableViewController()
+    }
+    
+    fileprivate func setupUI() {
+        let mealTime = getCurrentTime()
+        bannerLabel.text = "Hi Ric, it's \(mealTime) and the weather is beautiful. Here're some suggestions for you:"
+    }
+    
+    fileprivate func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        
-        print("Loading LocsView")
+    }
+    
+    fileprivate func setupTableViewController() {
         let tableViewController = TableViewController()
         tableView.addSubview(tableViewController.view)
         tableViewController.view.fillSuperView()
         addChild(tableViewController)
-        
-        tableViewController.locs = locs
-        
-        // Used for testing GET request (passed)
-        //        getPlaceData(url: "https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurant&location=42.3675294,-71.186966&radius=10000&key=AIzaSyDzi0HPWH371bh1Y96mRNQQhIgroKkQqk4", parameters: [:])
     }
     
     //MARK: - Location Manager Delegate Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        // the last value in locations is the most accurate (most recent)
-        let location  = locations[locations.count - 1]
+        guard let location  = locations.last else { return }
         if location.horizontalAccuracy > 0 {
+            //TODO: check what this part means
             locationManager.stopUpdatingLocation()
             locationManager.delegate = nil
             
-            print("longitude = \(location.coordinate.longitude), latitude = \(location.coordinate.latitude)")
-            
-            let latitude = String(location.coordinate.latitude)
-            let longitude = String(location.coordinate.longitude)
-            
-            let params : [String: String] = ["query": locationType, "location": "\(latitude),\(longitude)", "radius": "250", "key": API_KEY]
-            //            let params : [String: String] = ["query": "restaurant", "location": "\(42.3675294),\(-71.186966)", "radius": "10000", "key": API_KEY]
-            
-            
-            getPlaceData(url: googlePlaceSearchURL, parameters: params)
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
+            let placesParams: [String: String] = [
+                "query": locationType,
+                "location": "\(latitude),\(longitude)",
+                "radius": "250",
+                "key": GoogleAPI.key
+            ]
+            getPlaceData(url: GoogleAPI.places, parameters: placesParams)
+            let weatherParams: [String: String] = [
+                "lat": "\(latitude)",
+                "lon": "\(longitude)",
+                "appid": WeatherAPI.APP_ID
+            ]
+            getWeatherData(url: WeatherAPI.URL, parameters: weatherParams)
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
-        // TODO: - Display "Location Unavailable" somewhere
-        print("Location Unavailable")
+        print("Failed to get location due to an error:", error)
+        footerText = "Location Unavailable"
     }
     
-    
-    // MARK: - Networking
-    func getPlaceData(url: String, parameters: [String: String]) {
-        
+    // MARK: - get place from API
+    fileprivate func getPlaceData(url: String, parameters: [String: String]) {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
             response in
             if response.result.isSuccess {
-                print("Success! Got the nearby place data")
-                let nearbyPlacesJSON: JSON = JSON(response.result.value!) //comes from swiftyJSON
-                self.parseJSON(json: nearbyPlacesJSON)
+                let nearbyPlacesJSON: JSON = JSON(response.result.value!)
+                self.parsePlacesJSON(json: nearbyPlacesJSON)
             } else {
-                print("Error \(String(describing: response.result.error))")
-                // TODO: - Display "Connection issues" somewhere
+                print("Failed to get nearby locations info due to a connection issue:", response.result.error ?? "")
+                self.footerText = "Connection issues"
             }
         }
     }
     
-    func parseJSON(json: JSON) {
-        let status = json["status"]
-        if status != "OK" {
-            print("No nearby restaurants found!")
-            //TODO: Display error info somewhere
+    let locationNumber = 3
+    
+    fileprivate func parsePlacesJSON(json: JSON) {
+        if json["status"] != "OK" {
+            print("Failed to parse JSON")
+            footerText = "No nearby restaurants found!"
         } else {
-            let results = json["results"].arrayValue
-            let filteredResults = results.prefix(3)
-            for result in filteredResults {
+            let results = json["results"].arrayValue.prefix(locationNumber)
+            if results.count == 0 {
+                footerText = "There seems to be no \(locationType) nearby..."
+                return
+            }
+            for result in results {
                 let name: String = result["name"].stringValue
                 let address: String = result["formatted_address"].stringValue
-                let rating: Float = result["rating"].floatValue
-                let priceLevel: Int = result["price_level"].intValue
-                let restaurant = restaurantInfo(name: name, address: address, rating: rating, priceLevel: priceLevel)
-                
-                self.restaurantList.append(restaurant)
+                let placeId: String = result["place_id"].stringValue
+                var imageURL: [String: String]? = [
+                    "maxwidth" : "400",
+                    "photoreference" : "",
+                ]
+                if let photo = result["photos"].arrayValue.first {
+                    let photoReference: String = photo["photo_reference"].stringValue
+                    imageURL?["photoreference"] = photoReference
+                } else {
+                    imageURL = nil
+                }
+                let latitude = result["geometry"]["location"]["lat"].doubleValue
+                let longitude = result["geometry"]["location"]["lng"].doubleValue
+                let location = LocationInfo(
+                    name: name,
+                    address: address,
+                    imageURLParameters: imageURL,
+                    placeId: placeId,
+                    locationType: LocationAnnotation.LocationType(rawValue:locationType.lowercased()) ?? .restuarant,
+                    coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                )
+                self.locationList.append(location)
             }
-            self.locs = [
-                Location(name: self.restaurantList[0].name),
-                Location(name: self.restaurantList[1].name),
-                Location(name: self.restaurantList[2].name)
-            ]
             let tableVC = self.children.first as? TableViewController
-            tableVC?.locs = locs
-            dump(restaurantList)
+            tableVC?.locationList = locationList
+        }
+    }
+//    MARK: - get weather from API
+    fileprivate func getWeatherData(url: String, parameters: [String: String]) {
+        Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
+            (response) in
+            if response.result.isSuccess {
+                let weatherDataJSON: JSON = JSON(response.result.value!)
+                self.parseWeatherJSON(json: weatherDataJSON)
+            } else {
+                print("Failed to get weather info due to a connection issue:", response.result.error ?? "")
+            }
         }
     }
     
-    
+    fileprivate func parseWeatherJSON(json: JSON) {
+        if let tempResult = json["main"]["temp"].double { // safer
+            let temperatureC: Double = Double(tempResult - 273.15)
+            let city: String = json["name"].stringValue
+            let description: String = json["weather"][0]["main"].stringValue.lowercased()
+            let temperatureF: Int = Int(temperatureC * 1.8 + 32)
+            // Display
+            let mealTime = getCurrentTime()
+            self.bannerLabel.text =
+            """
+            Hi Ric, it's \(mealTime)!
+            The weather in \(city) is \(description), and the tempeture is \(temperatureF)°F.
+            Here're some suggestions for you:
+            """
+        } else {
+            print("Weather unavailable")
+        }
+    }
+//    MARK: - segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toLocDetail" {
             guard let indexPath = sender as? IndexPath else { return }
             let locDetailController = segue.destination as! LocDetailController
-            locDetailController.loc = locs[indexPath.row]
+            locDetailController.location = locationList[indexPath.row]
         }
     }
 }
 
 class TableViewController: UITableViewController {
-    var locs = [Location](){
+    var locationList = [LocationInfo](){
         didSet {
             tableView.reloadData()
         }
     }
     
+    var footerText: String? {
+        didSet {
+            footerLabel.text = footerText
+        }
+    }
+    
+    let footerLabel: UILabel = {
+       let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textAlignment = .center
+        return label
+    }()
+//    MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
+    
+    fileprivate func setupUI() {
         tableView.backgroundColor = .green
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .darkGray
         tableView.separatorInset = .zero
     }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
-    }
-    
+//    MARK: - tableView delegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locs.count
+        return locationList.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        let loc = locs[indexPath.row]
-        cell.textLabel?.text = "name: \(loc.name)"
+        let cell = LocCell(style: .default, reuseIdentifier: nil)
+        let loc = locationList[indexPath.row]
+        cell.location = loc
         return cell
     }
-    
+//    MARK: - segue
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         parent?.performSegue(withIdentifier: "toLocDetail", sender: indexPath)
     }
+//    MARK: - footer for error display
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return footerLabel
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        let height = locationList.count == 0 ? 100 : 0
+        return CGFloat(height)
+    }
 }
 
-struct Location {
-    let name: String
+extension LocsController {
+    enum MealTime: String {
+        case breakfast = "time for breakfast", morning, lunch = "time for lunch", afternoon, dinner = "time for dinner", evening, night = "time to sleep"
+    }
+    
+    fileprivate func getCurrentTime() -> MealTime {
+        let date = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        var mealTime: MealTime
+        switch(hour) {
+        case 6...8: mealTime = .breakfast
+        case 9...10: mealTime = .morning
+        case 11...13: mealTime = .lunch
+        case 14...16: mealTime = .afternoon
+        case 17...19: mealTime = .dinner
+        case 20...23: mealTime = .evening
+        default: mealTime = .night
+        }
+        return mealTime
+    }
 }

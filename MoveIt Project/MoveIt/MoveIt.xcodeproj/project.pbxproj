@@ -25,6 +25,15 @@
 		304FDF1E218D0A9100467886 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FDF1D218D0A9100467886 /* UIViewController+Extension.swift */; };
 		304FDF21218D0D5900467886 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FDF20218D0D5900467886 /* SettingsController.swift */; };
 		304FDF25218D178600467886 /* FavouriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FDF24218D178600467886 /* FavouriteController.swift */; };
+		308AAEA021923DDB00DB419A /* LineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308AAE9F21923DDB00DB419A /* LineChart.swift */; };
+		30B5886E21A0D03900E67C5F /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B5886D21A0D03900E67C5F /* AnnotationView.swift */; };
+		30C0807C2193609900961B52 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C0807B2193609900961B52 /* ProgressBar.swift */; };
+		30C0807E219366F300961B52 /* CountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C0807D219366F300961B52 /* CountingLabel.swift */; };
+		30C0809E21937DCC00961B52 /* Emitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C0809D21937DCC00961B52 /* Emitter.swift */; };
+		30C15353219C9BF7005DAED3 /* APIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C15352219C9BF7005DAED3 /* APIs.swift */; };
+		30C15357219CD230005DAED3 /* GoMapAppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30C15356219CD230005DAED3 /* GoMapAppButton.swift */; };
+		DD47CAAD21A0D0610062F460 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD47CAAC21A0D0610062F460 /* HealthKit.framework */; };
+		DD47CAAF21A0D3BB0062F460 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD47CAAE21A0D3BB0062F460 /* HealthKitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,8 +57,18 @@
 		304FDF1D218D0A9100467886 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		304FDF20218D0D5900467886 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		304FDF24218D178600467886 /* FavouriteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteController.swift; sourceTree = "<group>"; };
+		308AAE9F21923DDB00DB419A /* LineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChart.swift; sourceTree = "<group>"; };
+		30B5886D21A0D03900E67C5F /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		30C0807B2193609900961B52 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		30C0807D219366F300961B52 /* CountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountingLabel.swift; sourceTree = "<group>"; };
+		30C0809D21937DCC00961B52 /* Emitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emitter.swift; sourceTree = "<group>"; };
+		30C15352219C9BF7005DAED3 /* APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIs.swift; sourceTree = "<group>"; };
+		30C15356219CD230005DAED3 /* GoMapAppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoMapAppButton.swift; sourceTree = "<group>"; };
 		359DB59F25DFB081D9C3A536 /* Pods-MoveIt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoveIt.release.xcconfig"; path = "Pods/Target Support Files/Pods-MoveIt/Pods-MoveIt.release.xcconfig"; sourceTree = "<group>"; };
 		718B9FD5F9A0DA681240B515 /* Pods_MoveIt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoveIt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD47CAAB21A0D0610062F460 /* MoveIt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoveIt.entitlements; sourceTree = "<group>"; };
+		DD47CAAC21A0D0610062F460 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		DD47CAAE21A0D3BB0062F460 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +77,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D497A29D1F270966AA26E37 /* Pods_MoveIt.framework in Frameworks */,
+				DD47CAAD21A0D0610062F460 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +90,8 @@
 				3001D5F4218DECF7003EE29C /* LocsController.swift */,
 				3001D5F6218DF035003EE29C /* LocDetailController.swift */,
 				3001D5F8218E2C97003EE29C /* LocCell.swift */,
+				30B5886D21A0D03900E67C5F /* AnnotationView.swift */,
+				30C15356219CD230005DAED3 /* GoMapAppButton.swift */,
 			);
 			path = Locs;
 			sourceTree = "<group>";
@@ -95,6 +117,7 @@
 		304FDEF9218CB49D00467886 /* MoveIt */ = {
 			isa = PBXGroup;
 			children = (
+				DD47CAAB21A0D0610062F460 /* MoveIt.entitlements */,
 				304FDEFA218CB49D00467886 /* AppDelegate.swift */,
 				304FDF01218CB4A200467886 /* Assets.xcassets */,
 				304FDF1A218CFE4500467886 /* Utilities */,
@@ -121,6 +144,11 @@
 			isa = PBXGroup;
 			children = (
 				304F9271218D33BC000FE487 /* GoalController.swift */,
+				30C0807B2193609900961B52 /* ProgressBar.swift */,
+				308AAE9F21923DDB00DB419A /* LineChart.swift */,
+				30C0807D219366F300961B52 /* CountingLabel.swift */,
+				30C0809D21937DCC00961B52 /* Emitter.swift */,
+				DD47CAAE21A0D3BB0062F460 /* HealthKitManager.swift */,
 			);
 			path = Goal;
 			sourceTree = "<group>";
@@ -131,6 +159,7 @@
 				304FDF1B218CFE6600467886 /* UIColor+Extension.swift */,
 				304FDF1D218D0A9100467886 /* UIViewController+Extension.swift */,
 				3001D5F1218DE9D6003EE29C /* UIView+Extension.swift */,
+				30C15352219C9BF7005DAED3 /* APIs.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -159,6 +188,7 @@
 		9BA69B521B42F7F00CF4AD87 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD47CAAC21A0D0610062F460 /* HealthKit.framework */,
 				718B9FD5F9A0DA681240B515 /* Pods_MoveIt.framework */,
 			);
 			name = Frameworks;
@@ -198,6 +228,11 @@
 				TargetAttributes = {
 					304FDEF6218CB49D00467886 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -292,14 +327,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				304FDF1C218CFE6600467886 /* UIColor+Extension.swift in Sources */,
+				30B5886E21A0D03900E67C5F /* AnnotationView.swift in Sources */,
 				304FDF21218D0D5900467886 /* SettingsController.swift in Sources */,
 				3001D5F2218DE9D6003EE29C /* UIView+Extension.swift in Sources */,
 				304F9272218D33BC000FE487 /* GoalController.swift in Sources */,
 				304FDF1E218D0A9100467886 /* UIViewController+Extension.swift in Sources */,
+				30C0807E219366F300961B52 /* CountingLabel.swift in Sources */,
+				30C0807C2193609900961B52 /* ProgressBar.swift in Sources */,
 				3001D5F9218E2C97003EE29C /* LocCell.swift in Sources */,
+				DD47CAAF21A0D3BB0062F460 /* HealthKitManager.swift in Sources */,
+				30C0809E21937DCC00961B52 /* Emitter.swift in Sources */,
 				304FDF25218D178600467886 /* FavouriteController.swift in Sources */,
 				3001D5F5218DECF7003EE29C /* LocsController.swift in Sources */,
+				30C15353219C9BF7005DAED3 /* APIs.swift in Sources */,
+				308AAEA021923DDB00DB419A /* LineChart.swift in Sources */,
 				3001D5F7218DF035003EE29C /* LocDetailController.swift in Sources */,
+				30C15357219CD230005DAED3 /* GoMapAppButton.swift in Sources */,
 				304FDEFB218CB49D00467886 /* AppDelegate.swift in Sources */,
 				304FDF19218CBB9F00467886 /* HomeController.swift in Sources */,
 			);
@@ -456,17 +499,19 @@
 			baseConfigurationReference = 089B019F94329D58DA039908 /* Pods-MoveIt.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MoveIt/MoveIt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7Y4VS4Q5WX;
+				DEVELOPMENT_TEAM = U6J58C8CJT;
 				INFOPLIST_FILE = MoveIt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ECE564.MoveIt;
+				PRODUCT_BUNDLE_IDENTIFIER = team.ECE564.MoveIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -475,17 +520,19 @@
 			baseConfigurationReference = 359DB59F25DFB081D9C3A536 /* Pods-MoveIt.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MoveIt/MoveIt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7Y4VS4Q5WX;
+				DEVELOPMENT_TEAM = U6J58C8CJT;
 				INFOPLIST_FILE = MoveIt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ECE564.MoveIt;
+				PRODUCT_BUNDLE_IDENTIFIER = team.ECE564.MoveIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
