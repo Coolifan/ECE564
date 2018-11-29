@@ -12,34 +12,33 @@ import Alamofire
 import SwiftyJSON
 import CoreLocation
 import Contacts
+import Firebase
 
 class LocDetailController: UIViewController {
+    
+    var firebaseRef: DatabaseReference!
+    var isFav: Bool = false
+    var placesIdDic = [String: String]()
+    
 //    MARK: - data source
     var location: LocationInfo?
-//    MARK: - annotation
     var annotation: LocationAnnotation?
-//    MARK: - locationManager
     let locationManager = CLLocationManager()
     //    MARK: - UI component: mainStackView and bannerImage component
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var bannerImageView: UIImageView!
-    //    MARK: - UI component: name component
     @IBOutlet weak var nameStackView: UIStackView!
     @IBOutlet weak var nameTag: UILabel!
     @IBOutlet weak var name: UILabel!
-    //    MARK: - UI component: address component
     @IBOutlet weak var addressStackView: UIStackView!
     @IBOutlet weak var addressTag: UILabel!
     @IBOutlet weak var address: UILabel!
-    //    MARK: - UI component: phone component
     @IBOutlet weak var phoneStackView: UIStackView!
     @IBOutlet weak var phoneTag: UILabel!
-    @IBOutlet weak var phone: UILabel!
-    //    MARK: - UI component: website component
+    @IBOutlet weak var phoneTextView: UITextView!
     @IBOutlet weak var websiteStackView: UIStackView!
     @IBOutlet weak var websiteTag: UILabel!
-    @IBOutlet weak var website: UILabel!
-    //    MARK: - UI component: map and goMapApp button component
+    @IBOutlet weak var websiteTextView: UITextView!
     @IBOutlet weak var mapView: MKMapView!
     let goMapAppButton: GoMapAppButton = {
         let button = GoMapAppButton()
@@ -49,26 +48,124 @@ class LocDetailController: UIViewController {
     //    MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        firebaseRef = Database.database().reference()
         setupUI()
         fillContent()
         checkLocationServices()
         setupMap()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        queryFavStatus()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        let placeIds = Array(placesIdDic.values)
+        guard let placeId = location?.placeId else { return }
+        let isPlaceIdUploaded = placeIds.contains(placeId)
+        if isFav && !isPlaceIdUploaded {
+                    guard let location = location else { return }
+                    //let key = firebaseRef.child("favourites").childByAutoId().key!
+                    if case .restaurant = location.locationType {
+                        let key = firebaseRef.child("favourites/restaurants").childByAutoId().key!
+                        firebaseRef.child("favourites/restaurants/\(key)").setValue(placeId)
+                    }
+                    else if case .garden = location.locationType {
+                        let key = firebaseRef.child("favourites/parks").childByAutoId().key!
+                        firebaseRef.child("favourites/parks/\(key)").setValue(placeId)
+                    }
+        } else if !isFav && isPlaceIdUploaded {
+            let keys = (placesIdDic as NSDictionary).allKeys(for: placeId) as! [String]
+            guard let keyToDelete = keys.first else { return }
+            guard let locationType = location?.locationType else { return }
+            let dir = locationType == .restaurant ? "restaurants" : "parks"
+            firebaseRef.child("favourites/\(dir)/\(keyToDelete)").setValue(nil)
+        }
+    }
+    
+    
+    fileprivate func queryFavStatus() {
+        guard let locationType = location?.locationType else { return }
+        let locationTypeStr: String
+        switch locationType {
+        case .restaurant: locationTypeStr = "restaurants"
+        case .garden: locationTypeStr = "parks"
+        }
+        firebaseRef.child("favourites").child(locationTypeStr).observeSingleEvent(of: .value, with: { snapshot in
+            if let value = snapshot.value as? [String: String] {
+                DispatchQueue.main.async {
+                    self.placesIdDic = value
+                    let placeIds = Array(value.values)
+                    guard let placeId = self.location?.placeId else { return }
+                    let favButton = self.navigationItem.rightBarButtonItem!
+                    self.isFav = placeIds.contains(placeId) ? true : false
+                    let favImage = self.isFav ? #imageLiteral(resourceName: "alreadyFav").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "nonFav").withRenderingMode(.alwaysOriginal)
+                    favButton.image = favImage
+                }
+            }
+            else {
+                DispatchQueue.main.async {
+                    let favButton = self.navigationItem.rightBarButtonItem!
+                    self.isFav = false
+                    let favImage = self.isFav ? #imageLiteral(resourceName: "alreadyFav").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "nonFav").withRenderingMode(.alwaysOriginal)
+                    favButton.image = favImage
+                }
+                print("No data at this path")
+            }
+        }) { error in
+            DispatchQueue.main.async {
+                let favButton = self.navigationItem.rightBarButtonItem!
+                self.isFav = false
+                let favImage = self.isFav ? #imageLiteral(resourceName: "alreadyFav").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "nonFav").withRenderingMode(.alwaysOriginal)
+                favButton.image = favImage
+            }
+            print(error.localizedDescription)
+        }
+        
+        //        downloadGroup.enter()
+        
+        
+        //        downloadGroup.wait()
+    }
+    
 //    MARK: - setup UI
     fileprivate func setupUI() {
-        setupMainStackView()
+        setupFavButton()
+        setupMainView()
         setupBannerImageView()
         setupLabels()
+    }
+    
+    fileprivate func setupFavButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "nonFav").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(addToFav))
+    }
+    
+    @objc fileprivate func addToFav() {
+//        TODO: upload to Firebase
+        DispatchQueue.main.async {
+            self.isFav = !self.isFav
+            let favImage = self.isFav ? #imageLiteral(resourceName: "alreadyFav").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "nonFav").withRenderingMode(.alwaysOriginal)
+            let favButton = self.navigationItem.rightBarButtonItem!
+            favButton.image = favImage
+        }
     }
     
     fileprivate func setupGoMapAppButton() {
         mainStackView.addArrangedSubview(goMapAppButton)
         goMapAppButton.translatesAutoresizingMaskIntoConstraints = false
         goMapAppButton.heightAnchor.constraint(equalToConstant: 18).isActive = true
+        goMapAppButton.addTarget(self, action: #selector(handleTouchUp), for: .touchUpInside)
     }
     
-    fileprivate func setupMainStackView() {
+    @objc fileprivate func handleTouchUp() {
+        guard let annotation = mapView.annotations.first as? LocationAnnotation else { return }
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        annotation.mapItem().openInMaps(launchOptions: launchOptions)
+    }
+    
+    fileprivate func setupMainView() {
         setupGoMapAppButton()
         mainStackView.spacing = 8
         mainStackView.anchor(top: view.safeAreaLayoutGuide.topAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 5, left: 5, bottom: 15, right: 5))
@@ -78,6 +175,8 @@ class LocDetailController: UIViewController {
     fileprivate func setupBannerImageView() {
         bannerImageView.contentMode = .scaleAspectFill
         bannerImageView.clipsToBounds = true
+        bannerImageView.backgroundColor = UIColor.pear
+        bannerImageView.layer.opacity = 0.8
         bannerImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             bannerImageView.heightAnchor.constraint(equalToConstant: 100)
@@ -91,27 +190,42 @@ class LocDetailController: UIViewController {
     }
     
     fileprivate func setupTagLabels() {
-        nameTag.text = "name"
-        addressTag.text = "address"
-        phoneTag.text = "phone"
-        websiteTag.text = "website"
+        nameTag.text = "Name"
+        addressTag.text = "Address"
+        phoneTag.text = "Phone"
+        websiteTag.text = "Website"
         let tags = [nameTag, addressTag, phoneTag, websiteTag]
         tags.forEach { (tag) in
             tag?.translatesAutoresizingMaskIntoConstraints = false
             tag?.widthAnchor.constraint(equalToConstant: 55).isActive = true
             tag?.font = UIFont.boldSystemFont(ofSize: 12)
-            tag?.backgroundColor = .yellow
+            //tag?.backgroundColor = .yellow
             tag?.text?.append(":")
             tag?.textAlignment = .right
         }
     }
     
     fileprivate func setupContentLabels() {
-        let contentLabels = [name, address, phone, website]
+        let contentLabels = [name, address]
         contentLabels.forEach { (contentLabel) in
             contentLabel?.font = UIFont.systemFont(ofSize: 10)
             contentLabel?.lineBreakMode = .byWordWrapping
             contentLabel?.numberOfLines = 0
+        }
+        
+        let contentTextViews = [phoneTextView, websiteTextView]
+        contentTextViews.forEach { (textView) in
+            textView?.textContainerInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+            textView?.font = UIFont.systemFont(ofSize: 10)
+            textView?.isEditable = false
+            textView?.isSelectable = true
+            textView?.isUserInteractionEnabled = true
+            textView?.dataDetectorTypes = .all
+            textView?.linkTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.blue]
+            //textView?.backgroundColor = .yellow
+            textView?.translatesAutoresizingMaskIntoConstraints = false
+            textView?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            textView?.delegate = self
         }
     }
     
@@ -169,8 +283,10 @@ class LocDetailController: UIViewController {
     }
     
     fileprivate func setContactInfo(phone: String, website: String) {
-        self.phone.text = phone
-        self.website.text = website
+        phoneTextView.text = phone
+        websiteTextView.text = website
+        textViewDidChange(phoneTextView)
+        textViewDidChange(websiteTextView)
     }
     
     fileprivate func setContactInfoForAnnotation(phone: String, website: String) {
@@ -315,7 +431,7 @@ class LocationAnnotation: NSObject, MKAnnotation {
     
     enum LocationType: String {
         case garden
-        case restuarant
+        case restaurant
     }
     
     init(locationType: LocationType, coordinate: CLLocationCoordinate2D, address: String, title: String, subtitle: String? = nil, phone: String? = nil, website: String? = nil) {
@@ -340,5 +456,50 @@ class LocationAnnotation: NSObject, MKAnnotation {
         mapItem.phoneNumber = phone
         mapItem.url = URL(string: website ?? "")
         return mapItem
+    }
+}
+
+extension LocDetailController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        if URL.scheme == "tel" {
+            let phoneNumber = URL.absoluteString.replacingOccurrences(of: "tel:", with: "").replacingOccurrences(of: "%20", with: " ")
+            let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Call", style: .default, handler: { (alert) in
+                if UIApplication.shared.canOpenURL(URL) {
+                    UIApplication.shared.open(URL)
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) in
+                print("User cancelled")
+            }))
+            present(alert, animated: true, completion: nil)
+            
+            return false
+        } else {
+            let website = URL.absoluteString
+            let alert = UIAlertController(title: website, message: nil, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Open", style: .default, handler: { (alert) in
+                if UIApplication.shared.canOpenURL(URL) {
+                    UIApplication.shared.open(URL)
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (alert) in
+                print("User cancelled")
+            }))
+            present(alert, animated: true, completion: nil)
+            
+            return false
+        }
+    }
+    
+    //size textView to fit
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize.init(width: textView.bounds.width, height: .infinity)
+        let estimatedSize = textView.sizeThatFits(size)
+        textView.constraints.forEach { (constraint) in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+            }
+        }
     }
 }

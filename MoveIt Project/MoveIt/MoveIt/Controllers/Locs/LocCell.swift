@@ -56,8 +56,8 @@ class LocCell: UITableViewCell {
     
     let nameLabel: UILabel = {
        let label = UILabel()
-        label.backgroundColor = .emeraldGreen
-        label.font = UIFont.boldSystemFont(ofSize: 15)
+//        label.backgroundColor = .emeraldGreen
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         let lowLayoutProperty: Float = 100.0
@@ -68,9 +68,9 @@ class LocCell: UITableViewCell {
     
     let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "some description..."
+//        label.text = "some description..."
         label.font = UIFont.systemFont(ofSize: 12)
-        label.backgroundColor = .carrotOrange
+//        label.backgroundColor = .carrotOrange
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         let lowLayoutProperty: Float = 100.0
@@ -84,7 +84,7 @@ class LocCell: UITableViewCell {
         iv.image = #imageLiteral(resourceName: "arrow").withRenderingMode(.alwaysTemplate)
         iv.tintColor = .lightGray
         iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .carrotOrange
+//        iv.backgroundColor = .carrotOrange
         return iv
     }()
 //    MARK: - init, setupUI
@@ -120,7 +120,7 @@ class LocCell: UITableViewCell {
     
     fileprivate func arrowIconStackView() -> UIStackView {
         let spaceViewTop = UIView()
-        spaceViewTop.backgroundColor = .blue
+//        spaceViewTop.backgroundColor = .blue
         let stackView = UIStackView(arrangedSubviews: [spaceViewTop, arrowIcon])
         stackView.axis = .vertical
         return stackView

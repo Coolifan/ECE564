@@ -40,6 +40,8 @@ class GoMapAppButton: UIButton {
 //    MARK: - init, setupUI
     fileprivate func setupUI() {
         let stackView = UIStackView(arrangedSubviews: [decorationImage, textLabel, UIView(), arrowIcon])
+//        let tap gesture propogate to the button
+        stackView.isUserInteractionEnabled = false
         addSubview(stackView)
         stackView.fillSuperView()
     }

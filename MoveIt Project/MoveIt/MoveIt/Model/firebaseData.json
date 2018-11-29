@@ -1,0 +1,137 @@
+{
+    "restaurants": {
+        "ChIJzVzNJa7mrIkR-CNXwnvRH60": {
+            "id": "ChIJzVzNJa7mrIkR-CNXwnvRH60",
+            "name": "twinnie's",
+            "address": "101 Science dr, Durham 27708",
+            "phone": "(919) 660-3944",
+            "menu": [
+                {
+                    "item_name": "Chicken Pita",
+                    "price": "5.75",
+                    "Carbohydrates": 80,
+                    "Sugars": 20,
+                    "Calories": 200,
+                    "Fats": 15
+                },
+                
+                {
+                    "item_name": "Panini (Veggie)",
+                    "price": "6.50",
+                    "Carbohydrates": 50,
+                    "Sugars": 10,
+                    "Calories": 200,
+                    "Fats": 10
+                },
+                
+                {
+                    "item_name": "Chicken Focaccia",
+                    "price": "6.95",
+                    "Carbohydrates": 80,
+                    "Sugars": 15,
+                    "Calories": 300,
+                    "Fats": 15
+                },
+                
+                {
+                    "item_name": "Peanut Tuna Salad",
+                    "price": "6.50",
+                    "Carbohydrates": 90,
+                    "Sugars": 50,
+                    "Calories": 600,
+                    "Fats": 35
+                },
+                
+                {
+                    "item_name": "Roast Beef",
+                    "price": "6.95",
+                    "Carbohydrates": 80,
+                    "Sugars": 20,
+                    "Calories": 500,
+                    "Fats": 20
+                },
+                
+                {
+                    "item_name": "Turkey Club on Pita",
+                    "price": "6.95",
+                    "Carbohydrates": 80,
+                    "Sugars": 10,
+                    "Calories": 350,
+                    "Fats": 30
+                },
+                
+                {
+                    "item_name": "Turkey Avocado Bacon",
+                    "price": "6.95",
+                    "Carbohydrates": 80,
+                    "Sugars": 20,
+                    "Calories": 300,
+                    "Fats": 25
+                },
+                
+                {
+                    "item_name": "Twinnie's Cuban",
+                    "price": "6.95",
+                    "Carbohydrates": 80,
+                    "Sugars": 20,
+                    "Calories": 300,
+                    "Fats": 15
+                },
+                
+                {
+                    "item_name": "Spanakopita",
+                    "price": "7.95",
+                    "Carbohydrates": 100,
+                    "Sugars": 30,
+                    "Calories": 500,
+                    "Fats": 15
+                },
+                
+                {
+                    "item_name": "Reuben",
+                    "price": "7.25",
+                    "Carbohydrates": 150,
+                    "Sugars": 20,
+                    "Calories": 700,
+                    "Fats": 15
+                },
+                
+                {
+                    "item_name": "Caprese",
+                    "price": "6.50",
+                    "Carbohydrates": 80,
+                    "Sugars": 20,
+                    "Calories": 300,
+                    "Fats": 30
+                }
+            ]
+        }
+    },
+    
+    "parks":{},
+    
+    "settings": {
+        "Name": "James",
+        "Height(m)": "1.98",
+        "Weight(kg)": "98",
+        "Age": "55",
+        "Daily Step": "3000",
+        "Calories": "3000",
+        "Goal Weight": "60",
+        "Breakfast hour": "8",
+        "Breakfast minute": "8",
+        "Lunch hour": "12",
+        "Lunch minute": "30",
+        "Dinner hour": "18",
+        "Dinner minute": "30",
+        "max walk distance": "3000",
+        "max walk time": "30",
+        "favorite food": "broccoli",
+        "hated food": "mushroom"
+    },
+    
+    "favourites": {
+        "restaurants": [],
+        "parks": []
+    }
+}

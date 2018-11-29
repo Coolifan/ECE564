@@ -13,7 +13,7 @@ let healthKitStore: HKHealthStore = HKHealthStore()
 
 class HealthKitManager {
     var steps: Int = 0
-    func authorizeHealthKit() {
+    func authorizeHealthKit(to homeController: HomeController) {
         let stepCount = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
         let height = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.height)!
         let weight = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bodyMass)!
@@ -29,37 +29,38 @@ class HealthKitManager {
         healthKitStore.requestAuthorization(toShare: dataTypesToWrite, read: dataTypesToRead)
         { (success, error) -> Void in
             print("R/W authorized.")
+            self.readHealthData(to: homeController)
         }
     }
     
     
-    func readHealthData() {
+    func readHealthData(to homeController: HomeController) {
         guard let stepCount = HKQuantityType.quantityType(forIdentifier: .stepCount) else { return }
         let now = Date()
-        guard let exactlySevenDaysAgo = Calendar.current.date(byAdding: DateComponents(day: -7), to: now) else { return }
-        let startOfSevenDaysAgo = Calendar.current.startOfDay(for: exactlySevenDaysAgo)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfSevenDaysAgo, end: now, options: .strictStartDate)
-        //        let query = HKStatisticsQuery(quantityType: stepCount, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
-        //            guard let sum = result?.sumQuantity() else {
-        //                return
-        //            }
-        //            print(sum.doubleValue(for: HKUnit.count()))
-        //        }
+        guard let exactlySixDaysAgo = Calendar.current.date(byAdding: DateComponents(day: -6), to: now) else { return }
+        let startOfSixDaysAgo = Calendar.current.startOfDay(for: exactlySixDaysAgo)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfSixDaysAgo, end: now, options: .strictStartDate)
         
-        let query = HKStatisticsCollectionQuery(quantityType: stepCount, quantitySamplePredicate: predicate, options: .cumulativeSum, anchorDate: startOfSevenDaysAgo, intervalComponents: DateComponents(day: 1))
+        let query = HKStatisticsCollectionQuery(quantityType: stepCount, quantitySamplePredicate: predicate, options: .cumulativeSum, anchorDate: startOfSixDaysAgo, intervalComponents: DateComponents(day: 1))
         query.initialResultsHandler = { _, results, error in
             if let error = error {
                 print("Failed to query steps from HealthKit<##>", error)
                 return
             }
-            var weeklySteps = [Double]()
-            results?.enumerateStatistics(from: startOfSevenDaysAgo, to: now, with: { (statistics, stop) in
+            var weeklySteps = [Int]()
+            results?.enumerateStatistics(from: startOfSixDaysAgo, to: now, with: { (statistics, stop) in
                 if let quantity = statistics.sumQuantity() {
                     let dailySteps = quantity.doubleValue(for: HKUnit.count())
-                    weeklySteps.append(dailySteps)
+                    weeklySteps.append(Int(dailySteps))
                 }
             })
-//            TODO: - do something with weeklySteps
+            DispatchQueue.main.async {
+                homeController.weeklySteps = weeklySteps
+                let dailyStepRemaining = homeController.dailyStepsGoal - (weeklySteps.last ?? 0)
+                homeController.goalBtn.text = (dailyStepRemaining <= 0) ? "Good job! Daily goal achieved!" : "Only \(dailyStepRemaining) steps from your daily goal"
+                let streaks = weeklySteps.reversed().prefix(while: { $0 >= homeController.dailyStepsGoal }).count
+                homeController.streakBtn.text = "On a \(streaks) day streak of meeting daily goal!"
+            }
         }
         healthKitStore.execute(query)
         

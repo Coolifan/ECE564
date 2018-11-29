@@ -11,6 +11,7 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import Alamofire
+import Firebase
 
 //TODO: - code refactor, names change
 
@@ -22,36 +23,74 @@ struct LocationInfo {
     var placeId: String?
     var locationType: LocationAnnotation.LocationType
     var coordinate: CLLocationCoordinate2D
+    var rankValue: Int // for restaurant ranking
 }
 
 class LocsController: UIViewController, CLLocationManagerDelegate {
     
+    var firebaseRef: DatabaseReference!
+    
     var locationType: String = ""
     var locationList = [LocationInfo]()
-//    MARK: - GPS location manager
+    //    MARK: - GPS location manager
     let locationManager  = CLLocationManager()
-//    MARK: - storyboard component
+    //    MARK: - storyboard component
     @IBOutlet weak var bannerLabel: UILabel!
     @IBOutlet weak var tableView: UIView!
+    fileprivate var backgroundImage: UIImageView!
     
-//    MARK: - error display component
+    //    MARK: - error display component
     var footerText: String? {
         didSet {
             guard let tableViewController = children.first as? TableViewController else { return }
             tableViewController.footerText = footerText
         }
     }
-//    MARK: - viewDidLoad
+
+    //    MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Google Firebase reference
+        firebaseRef = Database.database().reference()
+        
         setupUI()
+        setUIStyles()
         setupLocationManager()
         setupTableViewController()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        var components = bannerLabel.text?.components(separatedBy: ",")
+        components?[0] = "Hi \(Settings.userName)"
+        bannerLabel.text = components?.joined(separator: ",")
+    }
+    
     fileprivate func setupUI() {
-        let mealTime = getCurrentTime()
+        let mealTime: String = getCurrentTime()
         bannerLabel.text = "Hi Ric, it's \(mealTime) and the weather is beautiful. Here're some suggestions for you:"
+        bannerLabel.font = UIFont(name: "GillSans-LightItalic", size: 18)
+        bannerLabel.textColor = UIColor.black
+        backgroundImage = UIImageView(frame: self.bannerLabel.bounds)
+        backgroundImage.image = UIImage(named: "locbackground.png")
+        backgroundImage.alpha = 0.5
+        backgroundImage.contentMode = .scaleToFill
+        self.view.insertSubview(backgroundImage, at: 0)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        backgroundImage.frame = bannerLabel.frame
+    }
+    
+    fileprivate func setUIStyles() {
+        bannerLabel.backgroundColor = UIColor.clear
+        bannerLabel.layer.opacity = 0.65
+        bannerLabel.layer.cornerRadius = 50
+        
+        tableView.backgroundColor = UIColor.pear
+        tableView.layer.opacity = 0.65
+        tableView.layer.cornerRadius = 20
     }
     
     fileprivate func setupLocationManager() {
@@ -69,6 +108,8 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
     }
     
     //MARK: - Location Manager Delegate Methods
+    let queryRadius: Int = 1000
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location  = locations.last else { return }
         if location.horizontalAccuracy > 0 {
@@ -81,7 +122,7 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
             let placesParams: [String: String] = [
                 "query": locationType,
                 "location": "\(latitude),\(longitude)",
-                "radius": "250",
+                "radius": "\(queryRadius)",
                 "key": GoogleAPI.key
             ]
             getPlaceData(url: GoogleAPI.places, parameters: placesParams)
@@ -113,26 +154,28 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    let locationNumber = 3
+    let selectNumber = 10
     
     fileprivate func parsePlacesJSON(json: JSON) {
         if json["status"] != "OK" {
             print("Failed to parse JSON")
             footerText = "No nearby restaurants found!"
         } else {
-            let results = json["results"].arrayValue.prefix(locationNumber)
+            let results = json["results"].arrayValue
             if results.count == 0 {
                 footerText = "There seems to be no \(locationType) nearby..."
                 return
             }
+            
             for result in results {
                 let name: String = result["name"].stringValue
+                
                 let address: String = result["formatted_address"].stringValue
                 let placeId: String = result["place_id"].stringValue
                 var imageURL: [String: String]? = [
                     "maxwidth" : "400",
                     "photoreference" : "",
-                ]
+                    ]
                 if let photo = result["photos"].arrayValue.first {
                     let photoReference: String = photo["photo_reference"].stringValue
                     imageURL?["photoreference"] = photoReference
@@ -141,21 +184,42 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
                 }
                 let latitude = result["geometry"]["location"]["lat"].doubleValue
                 let longitude = result["geometry"]["location"]["lng"].doubleValue
+                
+                // local restaurant data exists
+                /*let rID = 0
+                firebaseRef.child("restaurants").child("\(rID)").observeSingleEvent(of: .value, with: { snapshot in
+                    if let value = snapshot.value as? NSDictionary {
+                        let name = value["name"] as! String
+                        print(name)
+                        //let menu = value["menu"] as! NSArray
+                        //print((menu[0] as! NSDictionary)["price"]!)
+                    }
+                    else {
+                        print("No data at this path")
+                    }
+                }) { error in
+                    print(error.localizedDescription)
+                }*/
+                
+                print(locationType.lowercased())
                 let location = LocationInfo(
                     name: name,
                     address: address,
                     imageURLParameters: imageURL,
                     placeId: placeId,
-                    locationType: LocationAnnotation.LocationType(rawValue:locationType.lowercased()) ?? .restuarant,
-                    coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    locationType: LocationAnnotation.LocationType(rawValue:locationType.lowercased()) ?? .restaurant,
+                    coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude),
+                    rankValue: restaurantRanking.getRankValue(name)
                 )
                 self.locationList.append(location)
             }
             let tableVC = self.children.first as? TableViewController
-            tableVC?.locationList = locationList
+            tableVC?.locationList = Array((locationList.sorted {
+                $0.rankValue > $1.rankValue
+            }).prefix(selectNumber))
         }
     }
-//    MARK: - get weather from API
+    //    MARK: - get weather from API
     fileprivate func getWeatherData(url: String, parameters: [String: String]) {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
             (response) in
@@ -174,19 +238,19 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
             let city: String = json["name"].stringValue
             let description: String = json["weather"][0]["main"].stringValue.lowercased()
             let temperatureF: Int = Int(temperatureC * 1.8 + 32)
-            // Display
-            let mealTime = getCurrentTime()
+            
+            let mealTime: String = getCurrentTime()
             self.bannerLabel.text =
             """
-            Hi Ric, it's \(mealTime)!
+            Hi \(Settings.userName), it's \(mealTime)!
             The weather in \(city) is \(description), and the tempeture is \(temperatureF)°F.
-            Here're some suggestions for you:
+            Here're some rocommendation for you:
             """
         } else {
             print("Weather unavailable")
         }
     }
-//    MARK: - segue
+    //    MARK: - segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toLocDetail" {
             guard let indexPath = sender as? IndexPath else { return }
@@ -210,24 +274,24 @@ class TableViewController: UITableViewController {
     }
     
     let footerLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
         return label
     }()
-//    MARK: - viewDidLoad
+    //    MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
     
     fileprivate func setupUI() {
-        tableView.backgroundColor = .green
+        tableView.backgroundColor = .backgroundWhite
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .darkGray
         tableView.separatorInset = .zero
     }
-//    MARK: - tableView delegate
+    //    MARK: - tableView delegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return locationList.count
     }
@@ -238,11 +302,11 @@ class TableViewController: UITableViewController {
         cell.location = loc
         return cell
     }
-//    MARK: - segue
+    //    MARK: - segue
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         parent?.performSegue(withIdentifier: "toLocDetail", sender: indexPath)
     }
-//    MARK: - footer for error display
+    //    MARK: - footer for error display
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return footerLabel
     }
@@ -254,23 +318,18 @@ class TableViewController: UITableViewController {
 }
 
 extension LocsController {
-    enum MealTime: String {
-        case breakfast = "time for breakfast", morning, lunch = "time for lunch", afternoon, dinner = "time for dinner", evening, night = "time to sleep"
-    }
-    
-    fileprivate func getCurrentTime() -> MealTime {
+    fileprivate func getCurrentTime() -> String {
         let date = Date()
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: date)
-        var mealTime: MealTime
+        var mealTime: String
         switch(hour) {
-        case 6...8: mealTime = .breakfast
-        case 9...10: mealTime = .morning
-        case 11...13: mealTime = .lunch
-        case 14...16: mealTime = .afternoon
-        case 17...19: mealTime = .dinner
-        case 20...23: mealTime = .evening
-        default: mealTime = .night
+        case 6...8: mealTime = "time for breakfast"
+        case 9...10: mealTime = "morning"
+        case 11...13: mealTime = "time for lunch"
+        case 14...16: mealTime = "afternoon"
+        case 17...19: mealTime = "time for dinner"
+        default: mealTime = "evening"
         }
         return mealTime
     }

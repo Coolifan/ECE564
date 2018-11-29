@@ -10,6 +10,13 @@ import UIKit
 import Charts
 
 class LineChart: UIView {
+    var barLineValue: Int? {
+        didSet {
+            chartView.data = generateData()
+            chartView.data?.notifyDataChanged()
+            chartView.notifyDataSetChanged()
+        }
+    }
     var goalDataEntries: [GoalDataEntry]? {
         didSet {
             chartView.data = generateData()
@@ -32,13 +39,19 @@ class LineChart: UIView {
     
     func generateData() -> LineChartData {
         var entries = [ChartDataEntry]()
+        var barLineEntries = [ChartDataEntry]()
         goalDataEntries?.forEach({ (goalDataEntry) in
             let entry = ChartDataEntry(goalDataEntry: goalDataEntry)
             entries.append(entry)
+            let barLineEntry = GoalDataEntry(date: goalDataEntry.date, steps: barLineValue ?? 0)
+            let barEntry = ChartDataEntry(goalDataEntry: barLineEntry)
+            barLineEntries.append(barEntry)
         })
         let dataSet = LineChartDataSet(values: entries, label: "goal")
+        let barSet = LineChartDataSet(values: barLineEntries, label: "")
         setupDataSetUI(dataSet: dataSet)
-        let data = LineChartData(dataSet: dataSet)
+        setupBarDataSetUI(barDataSet: barSet)
+        let data = LineChartData(dataSets: [dataSet, barSet])
         return data
     }
     
@@ -51,11 +64,21 @@ class LineChart: UIView {
         dataSet.drawFilledEnabled = true
     }
     
+    fileprivate func setupBarDataSetUI(barDataSet: LineChartDataSet) {
+        barDataSet.colors = [UIColor.red]
+        barDataSet.drawCirclesEnabled = false
+        barDataSet.drawValuesEnabled = false
+        barDataSet.drawFilledEnabled = false
+    }
+    
     fileprivate func setupChartUI() {
         chartView.noDataText = "NO DATA..."
         chartView.noDataTextColor = .black
         chartView.noDataFont = UIFont.boldSystemFont(ofSize: 20)
         chartView.legend.enabled = false
+        chartView.pinchZoomEnabled = false
+        chartView.dragEnabled = false
+        chartView.setScaleEnabled(false)
         setupXAxis()
         setupYAxis()
     }
@@ -94,12 +117,8 @@ class LineChart: UIView {
         axis.gridLineWidth = 0.5
         axis.granularity = 0.5
         
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.maximumFractionDigits = 1
-        numberFormatter.minimumFractionDigits = 1
-        let axisFormatter = YAxisFormatter(numberFormatter: numberFormatter)
-        axis.valueFormatter = axisFormatter
+        axis.drawTopYLabelEntryEnabled = true
+        axis.accessibilityLabel = "YYYY"
     }
     
     required init?(coder aDecoder: NSCoder) {

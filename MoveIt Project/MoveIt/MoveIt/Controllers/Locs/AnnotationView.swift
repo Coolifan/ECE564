@@ -16,10 +16,10 @@ class AnnotationView: MKAnnotationView {
             canShowCallout = true
             calloutOffset = .init(x: -5, y: 5)
             let mapButton = UIButton(frame: CGRect(origin: .zero, size: .init(width: 30, height: 30)))
-            mapButton.setImage(#imageLiteral(resourceName: "map"), for: UIControl.State())
+            mapButton.setImage(#imageLiteral(resourceName: "next"), for: UIControl.State())
             rightCalloutAccessoryView = mapButton
             let icon: UIImage
-            if location.locationType == .restuarant {
+            if location.locationType == .restaurant {
                 icon = #imageLiteral(resourceName: "apple")
             } else {
                 icon = #imageLiteral(resourceName: "rose")

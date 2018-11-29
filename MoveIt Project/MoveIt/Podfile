@@ -9,5 +9,11 @@ target 'MoveIt' do
 pod 'SwiftyJSON'
 pod 'Charts'
 pod 'Alamofire'
+pod 'Firebase/Core'
+pod 'Firebase/Database'
+pod 'Eureka'
+
+
+
 
 end

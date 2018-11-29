@@ -2,10 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>You can take a picture as your avatar</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>You can upload a photo as your avatar</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+	</array>
 	<key>NSHealthShareUsageDescription</key>
-	<string>We will use your health information</string>
+	<string>We need to load data from health app</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>We will use your health information </string>
+	<string>We need to load data from health app</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -30,9 +40,9 @@
 		<true/>
 	</dict>
 	<key>NSLocationUsageDescription</key>
-	<string>We need your location : )</string>
+	<string>We need your location for navigation</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location : )</string>
+	<string>We need your location for navigation</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

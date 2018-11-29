@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0158C83721AEBB61000087D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0158C83621AEBB61000087D4 /* Assets.xcassets */; };
 		0D497A29D1F270966AA26E37 /* Pods_MoveIt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 718B9FD5F9A0DA681240B515 /* Pods_MoveIt.framework */; };
+		2A4EFAC421AC43F4007134AE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2A4EFAC321AC43F4007134AE /* GoogleService-Info.plist */; };
+		2A4EFAC721AC4DCC007134AE /* firebaseData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2A4EFAC621AC4DCC007134AE /* firebaseData.json */; };
+		2A4EFAC921AD5A82007134AE /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EFAC821AD5A82007134AE /* Ranking.swift */; };
+		2A4EFACB21ADE383007134AE /* restaurantInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EFACA21ADE383007134AE /* restaurantInfo.swift */; };
+		2A4EFACD21AEBFAE007134AE /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EFACC21AEBFAE007134AE /* settings.swift */; };
 		3001D5F2218DE9D6003EE29C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F1218DE9D6003EE29C /* UIView+Extension.swift */; };
 		3001D5F5218DECF7003EE29C /* LocsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F4218DECF7003EE29C /* LocsController.swift */; };
 		3001D5F7218DF035003EE29C /* LocDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F6218DF035003EE29C /* LocDetailController.swift */; };
@@ -15,7 +21,6 @@
 		304F9272218D33BC000FE487 /* GoalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F9271218D33BC000FE487 /* GoalController.swift */; };
 		304FDEFB218CB49D00467886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FDEFA218CB49D00467886 /* AppDelegate.swift */; };
 		304FDF00218CB49D00467886 /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 304FDEFE218CB49D00467886 /* TabBar.storyboard */; };
-		304FDF02218CB4A200467886 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 304FDF01218CB4A200467886 /* Assets.xcassets */; };
 		304FDF05218CB4A200467886 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 304FDF03218CB4A200467886 /* LaunchScreen.storyboard */; };
 		304FDF0D218CB97400467886 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 304FDF0C218CB97400467886 /* Home.storyboard */; };
 		304FDF10218CB98E00467886 /* Favourite.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 304FDF0E218CB98E00467886 /* Favourite.storyboard */; };
@@ -37,7 +42,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0158C83621AEBB61000087D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		089B019F94329D58DA039908 /* Pods-MoveIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoveIt.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MoveIt/Pods-MoveIt.debug.xcconfig"; sourceTree = "<group>"; };
+		2A4EFAC321AC43F4007134AE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2A4EFAC621AC4DCC007134AE /* firebaseData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = firebaseData.json; sourceTree = "<group>"; };
+		2A4EFAC821AD5A82007134AE /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
+		2A4EFACA21ADE383007134AE /* restaurantInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = restaurantInfo.swift; sourceTree = "<group>"; };
+		2A4EFACC21AEBFAE007134AE /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		3001D5F1218DE9D6003EE29C /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		3001D5F4218DECF7003EE29C /* LocsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocsController.swift; sourceTree = "<group>"; };
 		3001D5F6218DF035003EE29C /* LocDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailController.swift; sourceTree = "<group>"; };
@@ -46,7 +57,6 @@
 		304FDEF7218CB49D00467886 /* MoveIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoveIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		304FDEFA218CB49D00467886 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		304FDEFF218CB49D00467886 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TabBar.storyboard; sourceTree = "<group>"; };
-		304FDF01218CB4A200467886 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		304FDF04218CB4A200467886 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		304FDF06218CB4A200467886 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		304FDF0C218CB97400467886 /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
@@ -84,6 +94,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A4EFAC521AC4D3F007134AE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0158C83621AEBB61000087D4 /* Assets.xcassets */,
+				2A4EFAC621AC4DCC007134AE /* firebaseData.json */,
+				2A4EFAC821AD5A82007134AE /* Ranking.swift */,
+				2A4EFACA21ADE383007134AE /* restaurantInfo.swift */,
+				2A4EFACC21AEBFAE007134AE /* settings.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		3001D5F3218DECDE003EE29C /* Locs */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,9 +139,10 @@
 		304FDEF9218CB49D00467886 /* MoveIt */ = {
 			isa = PBXGroup;
 			children = (
+				2A4EFAC521AC4D3F007134AE /* Model */,
+				2A4EFAC321AC43F4007134AE /* GoogleService-Info.plist */,
 				DD47CAAB21A0D0610062F460 /* MoveIt.entitlements */,
 				304FDEFA218CB49D00467886 /* AppDelegate.swift */,
-				304FDF01218CB4A200467886 /* Assets.xcassets */,
 				304FDF1A218CFE4500467886 /* Utilities */,
 				304FDF1F218D0B8400467886 /* Controllers */,
 				304FDF13218CBA2E00467886 /* Storyboards */,
@@ -260,11 +283,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				304FDF05218CB4A200467886 /* LaunchScreen.storyboard in Resources */,
-				304FDF02218CB4A200467886 /* Assets.xcassets in Resources */,
 				304FDF00218CB49D00467886 /* TabBar.storyboard in Resources */,
 				304FDF12218CB99E00467886 /* Settings.storyboard in Resources */,
+				2A4EFAC721AC4DCC007134AE /* firebaseData.json in Resources */,
 				304FDF10218CB98E00467886 /* Favourite.storyboard in Resources */,
 				304FDF0D218CB97400467886 /* Home.storyboard in Resources */,
+				0158C83721AEBB61000087D4 /* Assets.xcassets in Resources */,
+				2A4EFAC421AC43F4007134AE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +329,11 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-MoveIt/Pods-MoveIt-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/Eureka/Eureka.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -312,7 +341,11 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Eureka.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -326,6 +359,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A4EFACD21AEBFAE007134AE /* settings.swift in Sources */,
 				304FDF1C218CFE6600467886 /* UIColor+Extension.swift in Sources */,
 				30B5886E21A0D03900E67C5F /* AnnotationView.swift in Sources */,
 				304FDF21218D0D5900467886 /* SettingsController.swift in Sources */,
@@ -333,6 +367,7 @@
 				304F9272218D33BC000FE487 /* GoalController.swift in Sources */,
 				304FDF1E218D0A9100467886 /* UIViewController+Extension.swift in Sources */,
 				30C0807E219366F300961B52 /* CountingLabel.swift in Sources */,
+				2A4EFACB21ADE383007134AE /* restaurantInfo.swift in Sources */,
 				30C0807C2193609900961B52 /* ProgressBar.swift in Sources */,
 				3001D5F9218E2C97003EE29C /* LocCell.swift in Sources */,
 				DD47CAAF21A0D3BB0062F460 /* HealthKitManager.swift in Sources */,
@@ -340,6 +375,7 @@
 				304FDF25218D178600467886 /* FavouriteController.swift in Sources */,
 				3001D5F5218DECF7003EE29C /* LocsController.swift in Sources */,
 				30C15353219C9BF7005DAED3 /* APIs.swift in Sources */,
+				2A4EFAC921AD5A82007134AE /* Ranking.swift in Sources */,
 				308AAEA021923DDB00DB419A /* LineChart.swift in Sources */,
 				3001D5F7218DF035003EE29C /* LocDetailController.swift in Sources */,
 				30C15357219CD230005DAED3 /* GoMapAppButton.swift in Sources */,

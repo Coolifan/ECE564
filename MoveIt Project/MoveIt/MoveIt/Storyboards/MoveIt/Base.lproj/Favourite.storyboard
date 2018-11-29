@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,10 +20,21 @@
                         <viewLayoutGuide key="safeArea" id="eh8-5e-lfR"/>
                     </view>
                     <navigationItem key="navigationItem" title="MoveIt" id="ysV-RV-GVd"/>
+                    <connections>
+                        <segue destination="OHe-I4-bfM" kind="show" identifier="favToDetail" id="xxl-Dh-ciw"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0jE-sS-qoz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1972" y="401.64917541229386"/>
+        </scene>
+        <!--detailViewController-->
+        <scene sceneID="Zdf-4c-Uhu">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="detailViewController" storyboardName="Home" referencedIdentifier="detailViewController" id="OHe-I4-bfM" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vmG-zR-tu1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2753" y="386"/>
         </scene>
         <!--Favourite-->
         <scene sceneID="CeG-iW-TMm">

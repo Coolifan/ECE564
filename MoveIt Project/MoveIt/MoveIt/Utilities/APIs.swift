@@ -11,6 +11,7 @@ struct GoogleAPI {
     static let placeDetail = "https://maps.googleapis.com/maps/api/place/details/json"
     static let image = "https://maps.googleapis.com/maps/api/place/photo"
     static let key = "AIzaSyDzi0HPWH371bh1Y96mRNQQhIgroKkQqk4"
+    static let placeId = "https://maps.googleapis.com/maps/api/place/details/json"
 }
 
 struct WeatherAPI {

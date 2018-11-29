@@ -9,16 +9,23 @@
 import UIKit
 
 class ProgressBar: UIView {
+    var barColor: UIColor? {
+        didSet {
+            shapeLayer.strokeColor = barColor?.cgColor
+            shadowLayer.fillColor = barColor?.cgColor
+        }
+    }
+    var defaultBarColor = UIColor.green
     let path: UIBezierPath = {
         let path = UIBezierPath(arcCenter: .zero, radius: 50, startAngle: -0.5 * CGFloat.pi, endAngle: 1.5 * CGFloat.pi, clockwise: true)
         return path
     }()
     
-    let shapeLayer: CAShapeLayer = {
+    lazy var shapeLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.lineCap = .round
         layer.lineWidth = 10
-        layer.strokeColor = UIColor.green.cgColor
+        layer.strokeColor = defaultBarColor.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.strokeEnd = 0
         return layer
@@ -33,9 +40,9 @@ class ProgressBar: UIView {
         return layer
     }()
     
-    let shadowLayer: CAShapeLayer = {
+    lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
-        layer.fillColor = UIColor.limeGreen.cgColor
+        layer.fillColor = defaultBarColor.cgColor
         return layer
     }()
     
