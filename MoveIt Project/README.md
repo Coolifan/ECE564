@@ -1,5 +1,5 @@
 # MoveIt!
-<img src="./doc/img/logo.PNG" align="middle">
+<img src="./doc/img/AppIcon.png" align="middle">
 
 
 ## Getting Started
