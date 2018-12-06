@@ -12,13 +12,15 @@ struct menuItem {
     var name: String!
     var price: String?
     var nutrition = [String: Int]()
+    var imageUrl: String?
     
     init(name: String,
          price: String? = nil,
          carbohydrates: Int?,
          sugars: Int?,
          calories: Int?,
-         fats: Int?) {
+         fats: Int?,
+         imageUrl: String?) {
         
         self.name = name
         self.price = price ?? nil
@@ -26,6 +28,7 @@ struct menuItem {
         nutrition["sugars"] = sugars
         nutrition["calories"] = calories
         nutrition["fats"] = fats
+        self.imageUrl = imageUrl
     }
 }
 

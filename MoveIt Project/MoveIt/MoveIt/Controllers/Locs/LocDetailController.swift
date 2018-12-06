@@ -20,10 +20,11 @@ class LocDetailController: UIViewController {
     var isFav: Bool = false
     var placesIdDic = [String: String]()
     
-//    MARK: - data source
+    //    MARK: - data source
     var location: LocationInfo?
     var annotation: LocationAnnotation?
     let locationManager = CLLocationManager()
+    
     //    MARK: - UI component: mainStackView and bannerImage component
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var bannerImageView: UIImageView!
@@ -40,8 +41,14 @@ class LocDetailController: UIViewController {
     @IBOutlet weak var websiteTag: UILabel!
     @IBOutlet weak var websiteTextView: UITextView!
     @IBOutlet weak var mapView: MKMapView!
+    
     let goMapAppButton: GoMapAppButton = {
         let button = GoMapAppButton()
+        return button
+    }()
+    let goMenuButton: GoMapAppButton = {
+        let button = GoMapAppButton()
+        button.backgroundColor = UIColor(displayP3Red: 0.5, green: 0.5, blue: 0.5, alpha: 0.08)
         return button
     }()
     
@@ -67,7 +74,6 @@ class LocDetailController: UIViewController {
         let isPlaceIdUploaded = placeIds.contains(placeId)
         if isFav && !isPlaceIdUploaded {
                     guard let location = location else { return }
-                    //let key = firebaseRef.child("favourites").childByAutoId().key!
                     if case .restaurant = location.locationType {
                         let key = firebaseRef.child("favourites/restaurants").childByAutoId().key!
                         firebaseRef.child("favourites/restaurants/\(key)").setValue(placeId)
@@ -123,14 +129,9 @@ class LocDetailController: UIViewController {
             }
             print(error.localizedDescription)
         }
-        
-        //        downloadGroup.enter()
-        
-        
-        //        downloadGroup.wait()
     }
     
-//    MARK: - setup UI
+    //    MARK: - setup UI
     fileprivate func setupUI() {
         setupFavButton()
         setupMainView()
@@ -143,7 +144,6 @@ class LocDetailController: UIViewController {
     }
     
     @objc fileprivate func addToFav() {
-//        TODO: upload to Firebase
         DispatchQueue.main.async {
             self.isFav = !self.isFav
             let favImage = self.isFav ? #imageLiteral(resourceName: "alreadyFav").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "nonFav").withRenderingMode(.alwaysOriginal)
@@ -159,6 +159,20 @@ class LocDetailController: UIViewController {
         goMapAppButton.addTarget(self, action: #selector(handleTouchUp), for: .touchUpInside)
     }
     
+    fileprivate func setupGoMenuButton() {
+        mainStackView.insertArrangedSubview(goMenuButton, at: 5)
+        goMenuButton.translatesAutoresizingMaskIntoConstraints = false
+        goMenuButton.heightAnchor.constraint(equalToConstant: 18).isActive = true
+        goMenuButton.addTarget(self, action: #selector(handleGoToMenu), for: .touchUpInside)
+        goMenuButton.textLabel.text = "See Menus"
+        goMenuButton.decorationImage.image = #imageLiteral(resourceName: "rose").withRenderingMode(.alwaysOriginal)
+    }
+    
+    @objc fileprivate func handleGoToMenu() {
+        let menusController = MenusController()
+        navigationController?.pushViewController(menusController, animated: true)
+    }
+    
     @objc fileprivate func handleTouchUp() {
         guard let annotation = mapView.annotations.first as? LocationAnnotation else { return }
         let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
@@ -167,6 +181,9 @@ class LocDetailController: UIViewController {
     
     fileprivate func setupMainView() {
         setupGoMapAppButton()
+        if let type = location?.locationType, type != .garden {
+            setupGoMenuButton()
+        }
         mainStackView.spacing = 8
         mainStackView.anchor(top: view.safeAreaLayoutGuide.topAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 5, left: 5, bottom: 15, right: 5))
         mainStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -199,7 +216,6 @@ class LocDetailController: UIViewController {
             tag?.translatesAutoresizingMaskIntoConstraints = false
             tag?.widthAnchor.constraint(equalToConstant: 55).isActive = true
             tag?.font = UIFont.boldSystemFont(ofSize: 12)
-            //tag?.backgroundColor = .yellow
             tag?.text?.append(":")
             tag?.textAlignment = .right
         }
@@ -222,7 +238,6 @@ class LocDetailController: UIViewController {
             textView?.isUserInteractionEnabled = true
             textView?.dataDetectorTypes = .all
             textView?.linkTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.blue]
-            //textView?.backgroundColor = .yellow
             textView?.translatesAutoresizingMaskIntoConstraints = false
             textView?.heightAnchor.constraint(equalToConstant: 20).isActive = true
             textView?.delegate = self
@@ -236,10 +251,12 @@ class LocDetailController: UIViewController {
             stackView?.alignment = .top
         }
     }
-//    MARK: - fill content
+    
+    //    MARK: - fill content
     fileprivate func fillContent() {
         guard let location = location else { return }
         setAddressInfo(name: location.name, address: location.address)
+        
         //get & set contact info
         let parameters = [
             "placeid": location.placeId ?? "",
@@ -247,6 +264,7 @@ class LocDetailController: UIViewController {
             "key": GoogleAPI.key
         ]
         getPlaceData(url: GoogleAPI.placeDetail, parameters: parameters)
+        
         //get & set banner photo
         guard let imageURLParameters = location.imageURLParameters else { return }
         downloadPhoto(using: imageURLParameters)
@@ -318,13 +336,12 @@ class LocDetailController: UIViewController {
         return "\(GoogleAPI.image)?maxwidth=\(maxWidth)&photoreference=\(photoReference)&key=\(GoogleAPI.key)"
     }
     
-//    MARK: - setup location manager
+    //    MARK: - setup location manager
     fileprivate func checkLocationServices() {
         if CLLocationManager.locationServicesEnabled() {
             setupLocationManager()
             checkLocationAuthorization()
         } else {
-//            TODO: - show an alert to inform the user to turn on location service in setttings
             print("Location Service unavailable")
         }
     }
@@ -341,15 +358,12 @@ class LocDetailController: UIViewController {
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
         case .denied:
-//            TODO: - show an alert tell the user what to do
             break
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .restricted:
-//            TODO: - show an alert tell the user what's up
             break
         case .authorizedAlways:
-//            TODO: - This is not what we expect
             break
         }
     }

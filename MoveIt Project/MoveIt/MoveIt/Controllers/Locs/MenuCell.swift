@@ -1,5 +1,5 @@
 //
-//  LocCell.swift
+//  menuCell.swift
 //  MoveIt
 //
 //  Created by Haohong Zhao on 11/3/18.
@@ -9,21 +9,28 @@
 import UIKit
 import Alamofire
 
-class LocCell: UITableViewCell {
+class MenuCell: UITableViewCell {
     //    MARK: - data source
-    var location: LocationInfo? {
+    var menu: menuItem? {
         didSet {
-            nameLabel.text = location?.name
-            if let imageURLParameters = location?.imageURLParameters {
-                downloadPhoto(using: imageURLParameters)
+            nameLabel.text = menu?.name
+            if let url = menu?.imageUrl {
+                downloadPhoto(using: url)
             }
+            guard let carb = menu?.nutrition["carbohydrates"],
+                  let fats = menu?.nutrition["fats"],
+                  let sugars = menu?.nutrition["sugars"],
+                let cal = menu?.nutrition["calories"] else { return }
+            self.cal.text = "\(cal) kcal"
+            self.fats.text = "\(fats) g"
+            self.sugars.text = "\(sugars) g"
+            self.carb.text = "\(carb) g"
         }
     }
     
     //    MARK: - photo download
-    fileprivate func downloadPhoto(using urlParameters: [String: String]) {
-        guard let urlString = generateImageURLString(using: urlParameters) else { return }
-        guard let url = URL(string: urlString) else { return }
+    fileprivate func downloadPhoto(using imageUrl: String) {
+        guard let url = URL(string: imageUrl) else { return }
         URLSession.shared.dataTask(with: url) { (data, resp, err) in
             if let err = err {
                 print("Failed to download location image<##>", err)
@@ -35,12 +42,6 @@ class LocCell: UITableViewCell {
                 self.sceneImage.image = image
             }
             }.resume()
-    }
-    
-    private func generateImageURLString(using parameters: [String: String]) -> String? {
-        guard let maxWidth = parameters["maxwidth"] else { return nil }
-        guard let photoReference = parameters["photoreference"] else { return nil }
-        return "\(GoogleAPI.image)?maxwidth=\(maxWidth)&photoreference=\(photoReference)&key=\(GoogleAPI.key)"
     }
     
     //    MARK: - UI component
@@ -56,7 +57,7 @@ class LocCell: UITableViewCell {
     }()
     
     let nameLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
@@ -66,20 +67,71 @@ class LocCell: UITableViewCell {
         return label
     }()
     
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 0
-        let lowLayoutProperty: Float = 100.0
-        label.setContentHuggingPriority(UILayoutPriority(rawValue: lowLayoutProperty), for: .horizontal)
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: lowLayoutProperty), for: .horizontal)
+    let calTag: UILabel = {
+       let label = UILabel()
+        label.text = "Calories:    "
+        label.font = UIFont.boldSystemFont(ofSize: 8)
         return label
     }()
     
+    let cal: UILabel = {
+        let label = UILabel()
+        label.text = "Calories:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let fatsTag: UILabel = {
+        let label = UILabel()
+        label.text = "Fats:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let fats: UILabel = {
+        let label = UILabel()
+        label.text = "Fats:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let sugarsTag: UILabel = {
+        let label = UILabel()
+        label.text = "Sugars:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let sugars: UILabel = {
+        let label = UILabel()
+        label.text = "Sugars:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let carbTag: UILabel = {
+        let label = UILabel()
+        label.text = "Carbohydrates:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let carb: UILabel = {
+        let label = UILabel()
+        label.text = "Carbohydrates:"
+        label.font = UIFont.boldSystemFont(ofSize: 8)
+        return label
+    }()
+    
+    let nutritionStackView: UIStackView = {
+       let stackView = UIStackView()
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
+    
     let arrowIcon: UIImageView = {
         let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "arrow").withRenderingMode(.alwaysTemplate)
         iv.tintColor = .lightGray
         iv.contentMode = .scaleAspectFill
         return iv
@@ -123,10 +175,29 @@ class LocCell: UITableViewCell {
     }
     
     fileprivate func textsStackView() -> UIStackView {
-        let stackView = UIStackView(arrangedSubviews: [nameLabel, descriptionLabel])
+        setupNutritionStackView()
+        let stackView = UIStackView(arrangedSubviews: [nameLabel, nutritionStackView])
         stackView.axis = .vertical
         stackView.spacing = 4
         return stackView
+    }
+    
+    fileprivate func nutritionStackLineOne() -> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: [calTag, cal, fatsTag, fats])
+        stackView.distribution = .equalSpacing
+        return stackView
+    }
+    
+    fileprivate func nutritionStackLineTwo() -> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: [carbTag, carb, sugarsTag, sugars])
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 4
+        return stackView
+    }
+    
+    fileprivate func setupNutritionStackView() {
+        nutritionStackView.addArrangedSubview(nutritionStackLineOne())
+        nutritionStackView.addArrangedSubview(nutritionStackLineTwo())
     }
     
     required init?(coder aDecoder: NSCoder) {

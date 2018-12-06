@@ -8,6 +8,7 @@
             "menu": [
                 {
                     "item_name": "Chicken Pita",
+                    "url": "https://images-gmi-pmc.edge-generalmills.com/5d4933c9-8abf-461a-bfbf-65eedeb990b3.jpg",
                     "price": "5.75",
                     "Carbohydrates": 80,
                     "Sugars": 20,
@@ -17,15 +18,17 @@
                 
                 {
                     "item_name": "Panini (Veggie)",
+                    "url": "https://www.cscassets.com/recipes/large_cknew/large_50843.jpg",
                     "price": "6.50",
                     "Carbohydrates": 50,
                     "Sugars": 10,
-                    "Calories": 200,
+                    "Calories": 150,
                     "Fats": 10
                 },
                 
                 {
                     "item_name": "Chicken Focaccia",
+                    "url": "https://assets.kraftfoods.com/recipe_images/opendeploy/Grilled-Chicken-Focaccia-57854_640x428.jpg",
                     "price": "6.95",
                     "Carbohydrates": 80,
                     "Sugars": 15,
@@ -35,24 +38,27 @@
                 
                 {
                     "item_name": "Peanut Tuna Salad",
+                    "url": "http://www.peanutbutterandpeppers.com/wp-content/uploads/2012/03/tuna-melt-010.jpg",
                     "price": "6.50",
                     "Carbohydrates": 90,
                     "Sugars": 50,
                     "Calories": 600,
-                    "Fats": 35
+                    "Fats": 60
                 },
                 
                 {
                     "item_name": "Roast Beef",
+                    "url": "https://cdn-image.myrecipes.com/sites/default/files/styles/medium_2x/public/image/recipes/hl/roast-beef-horseradish-1996459-x.jpg?itok=WcxK5TL3",
                     "price": "6.95",
                     "Carbohydrates": 80,
                     "Sugars": 20,
-                    "Calories": 500,
+                    "Calories": 850,
                     "Fats": 20
                 },
                 
                 {
                     "item_name": "Turkey Club on Pita",
+                    "url": "https://d5dnlg5k9nac9.cloudfront.net/processed/thumbs/78c35c046f82b7889f8e4aaa2c79ec140cc20f4e_r791_530.png",
                     "price": "6.95",
                     "Carbohydrates": 80,
                     "Sugars": 10,
@@ -62,6 +68,7 @@
                 
                 {
                     "item_name": "Turkey Avocado Bacon",
+                    "url": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2010/10/26/2/027_and-Bacon-Sandwich-Avacado-Roast-Turkey_s4x3.jpg.rend.hgtvcom.826.620.suffix/1382539499949.jpeg",
                     "price": "6.95",
                     "Carbohydrates": 80,
                     "Sugars": 20,
@@ -71,15 +78,17 @@
                 
                 {
                     "item_name": "Twinnie's Cuban",
+                    "url": "https://keystonemeats.com/wp-content/uploads/2017/12/keystone-cuban-sandwich.jpg",
                     "price": "6.95",
                     "Carbohydrates": 80,
                     "Sugars": 20,
-                    "Calories": 300,
-                    "Fats": 15
+                    "Calories": 900,
+                    "Fats": 90
                 },
                 
                 {
                     "item_name": "Spanakopita",
+                    "url": "https://images.food52.com/iCjzuvgZqhZFLKmbr35lZInLlPg=/1200x1200/4184a88d-2e9c-4190-91f9-bb8591a440d6--2015-0818_spanikopita-grilled-cheese_james-ransom-029.jpg",
                     "price": "7.95",
                     "Carbohydrates": 100,
                     "Sugars": 30,
@@ -89,6 +98,7 @@
                 
                 {
                     "item_name": "Reuben",
+                    "url": "https://cdn-image.myrecipes.com/sites/default/files/styles/medium_2x/public/image/lighten-up-america/reuben-sandwiches-ck-x.jpg?itok=2v677wqP",
                     "price": "7.25",
                     "Carbohydrates": 150,
                     "Sugars": 20,
@@ -98,9 +108,10 @@
                 
                 {
                     "item_name": "Caprese",
+                    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMMNzRheK58LXdI1kh6HJ4Zq_CkdEXX4xT5cpEZdM5opDBwNl5",
                     "price": "6.50",
                     "Carbohydrates": 80,
-                    "Sugars": 20,
+                    "Sugars": 58,
                     "Calories": 300,
                     "Fats": 30
                 }
@@ -117,9 +128,9 @@
         "Age": "55",
         "Daily Step": "3000",
         "Calories": "3000",
-        "Goal Weight": "60",
-        "Breakfast hour": "8",
-        "Breakfast minute": "8",
+        "Goal Weight": "95",
+        "Breakfast hour": "08",
+        "Breakfast minute": "30",
         "Lunch hour": "12",
         "Lunch minute": "30",
         "Dinner hour": "18",

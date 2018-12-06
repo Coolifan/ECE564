@@ -36,11 +36,11 @@
             </objects>
             <point key="canvasLocation" x="2753" y="386"/>
         </scene>
-        <!--Favourite-->
+        <!--Favorite-->
         <scene sceneID="CeG-iW-TMm">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DCa-uK-HLT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Favourite" image="favourite" id="h2D-pF-Zp4"/>
+                    <tabBarItem key="tabBarItem" title="Favorite" image="favourite" id="h2D-pF-Zp4"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vC4-em-7ne">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>

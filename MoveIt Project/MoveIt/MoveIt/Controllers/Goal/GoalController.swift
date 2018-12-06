@@ -9,8 +9,6 @@
 import UIKit
 import Charts
 
-//TODO: - learn costum trasition animation
-
 class GoalController: UIViewController {
     var dailyStepsGoal: Int = 5000
     var weeklySteps = [Int]()
@@ -67,7 +65,7 @@ class GoalController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.backgroundColor = .white
+        
         let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
         backgroundImage.image = UIImage(named: "goalBG.png")
         backgroundImage.contentMode = .scaleAspectFill

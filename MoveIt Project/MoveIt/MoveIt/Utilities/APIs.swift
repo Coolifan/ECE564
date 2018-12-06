@@ -18,3 +18,8 @@ struct WeatherAPI {
     static let URL = "https://api.openweathermap.org/data/2.5/weather"
     static let APP_ID = "80a6764d399620f1658c8e4a660140df"
 }
+
+struct DistanceMatrixAPI {
+    static let url = "https://maps.googleapis.com/maps/api/distancematrix/json"
+    static let key = "AIzaSyBfk8EDPBPW4xPImEJbs5v19QSopFM-oxg"
+}

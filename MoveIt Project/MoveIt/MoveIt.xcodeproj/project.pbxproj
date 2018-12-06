@@ -14,10 +14,13 @@
 		2A4EFAC921AD5A82007134AE /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EFAC821AD5A82007134AE /* Ranking.swift */; };
 		2A4EFACB21ADE383007134AE /* restaurantInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EFACA21ADE383007134AE /* restaurantInfo.swift */; };
 		2A4EFACD21AEBFAE007134AE /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EFACC21AEBFAE007134AE /* settings.swift */; };
+		2A58DC2221B8C349005ACCF2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A58DC2121B8C349005ACCF2 /* Notification.swift */; };
 		3001D5F2218DE9D6003EE29C /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F1218DE9D6003EE29C /* UIView+Extension.swift */; };
 		3001D5F5218DECF7003EE29C /* LocsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F4218DECF7003EE29C /* LocsController.swift */; };
 		3001D5F7218DF035003EE29C /* LocDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F6218DF035003EE29C /* LocDetailController.swift */; };
 		3001D5F9218E2C97003EE29C /* LocCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3001D5F8218E2C97003EE29C /* LocCell.swift */; };
+		3044CF4121B897BE00D1597E /* MenusController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3044CF4021B897BE00D1597E /* MenusController.swift */; };
+		3044CF4321B8A24400D1597E /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3044CF4221B8A24400D1597E /* MenuCell.swift */; };
 		304F9272218D33BC000FE487 /* GoalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304F9271218D33BC000FE487 /* GoalController.swift */; };
 		304FDEFB218CB49D00467886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304FDEFA218CB49D00467886 /* AppDelegate.swift */; };
 		304FDF00218CB49D00467886 /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 304FDEFE218CB49D00467886 /* TabBar.storyboard */; };
@@ -49,10 +52,13 @@
 		2A4EFAC821AD5A82007134AE /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		2A4EFACA21ADE383007134AE /* restaurantInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = restaurantInfo.swift; sourceTree = "<group>"; };
 		2A4EFACC21AEBFAE007134AE /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
+		2A58DC2121B8C349005ACCF2 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		3001D5F1218DE9D6003EE29C /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		3001D5F4218DECF7003EE29C /* LocsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocsController.swift; sourceTree = "<group>"; };
 		3001D5F6218DF035003EE29C /* LocDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailController.swift; sourceTree = "<group>"; };
 		3001D5F8218E2C97003EE29C /* LocCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocCell.swift; sourceTree = "<group>"; };
+		3044CF4021B897BE00D1597E /* MenusController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenusController.swift; sourceTree = "<group>"; };
+		3044CF4221B8A24400D1597E /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
 		304F9271218D33BC000FE487 /* GoalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalController.swift; sourceTree = "<group>"; };
 		304FDEF7218CB49D00467886 /* MoveIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoveIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		304FDEFA218CB49D00467886 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -114,6 +120,8 @@
 				3001D5F8218E2C97003EE29C /* LocCell.swift */,
 				30B5886D21A0D03900E67C5F /* AnnotationView.swift */,
 				30C15356219CD230005DAED3 /* GoMapAppButton.swift */,
+				3044CF4021B897BE00D1597E /* MenusController.swift */,
+				3044CF4221B8A24400D1597E /* MenuCell.swift */,
 			);
 			path = Locs;
 			sourceTree = "<group>";
@@ -183,6 +191,7 @@
 				304FDF1D218D0A9100467886 /* UIViewController+Extension.swift */,
 				3001D5F1218DE9D6003EE29C /* UIView+Extension.swift */,
 				30C15352219C9BF7005DAED3 /* APIs.swift */,
+				2A58DC2121B8C349005ACCF2 /* Notification.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -362,6 +371,7 @@
 				2A4EFACD21AEBFAE007134AE /* settings.swift in Sources */,
 				304FDF1C218CFE6600467886 /* UIColor+Extension.swift in Sources */,
 				30B5886E21A0D03900E67C5F /* AnnotationView.swift in Sources */,
+				2A58DC2221B8C349005ACCF2 /* Notification.swift in Sources */,
 				304FDF21218D0D5900467886 /* SettingsController.swift in Sources */,
 				3001D5F2218DE9D6003EE29C /* UIView+Extension.swift in Sources */,
 				304F9272218D33BC000FE487 /* GoalController.swift in Sources */,
@@ -372,6 +382,7 @@
 				3001D5F9218E2C97003EE29C /* LocCell.swift in Sources */,
 				DD47CAAF21A0D3BB0062F460 /* HealthKitManager.swift in Sources */,
 				30C0809E21937DCC00961B52 /* Emitter.swift in Sources */,
+				3044CF4121B897BE00D1597E /* MenusController.swift in Sources */,
 				304FDF25218D178600467886 /* FavouriteController.swift in Sources */,
 				3001D5F5218DECF7003EE29C /* LocsController.swift in Sources */,
 				30C15353219C9BF7005DAED3 /* APIs.swift in Sources */,
@@ -380,6 +391,7 @@
 				3001D5F7218DF035003EE29C /* LocDetailController.swift in Sources */,
 				30C15357219CD230005DAED3 /* GoMapAppButton.swift in Sources */,
 				304FDEFB218CB49D00467886 /* AppDelegate.swift in Sources */,
+				3044CF4321B8A24400D1597E /* MenuCell.swift in Sources */,
 				304FDF19218CBB9F00467886 /* HomeController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,6 +548,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MoveIt/MoveIt.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U6J58C8CJT;
 				INFOPLIST_FILE = MoveIt/Info.plist;
@@ -546,6 +559,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = team.ECE564.MoveIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -557,6 +571,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MoveIt/MoveIt.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = U6J58C8CJT;
 				INFOPLIST_FILE = MoveIt/Info.plist;
@@ -567,6 +582,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = team.ECE564.MoveIt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

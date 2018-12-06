@@ -13,8 +13,6 @@ import SwiftyJSON
 import Alamofire
 import Firebase
 
-//TODO: - code refactor, names change
-
 // Struct for saving location info
 struct LocationInfo {
     var name: String
@@ -26,14 +24,24 @@ struct LocationInfo {
     var rankValue: Int // for restaurant ranking
 }
 
+struct WalkingInfo {
+    var distance: String?
+    var time: String?
+}
+
 class LocsController: UIViewController, CLLocationManagerDelegate {
     
     var firebaseRef: DatabaseReference!
     
     var locationType: String = ""
     var locationList = [LocationInfo]()
+    var walkingInfoList = [WalkingInfo]()
+    
     //    MARK: - GPS location manager
     let locationManager  = CLLocationManager()
+    var myLongitude: Double?
+    var myLatitude: Double?
+    
     //    MARK: - storyboard component
     @IBOutlet weak var bannerLabel: UILabel!
     @IBOutlet weak var tableView: UIView!
@@ -113,12 +121,14 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location  = locations.last else { return }
         if location.horizontalAccuracy > 0 {
-            //TODO: check what this part means
             locationManager.stopUpdatingLocation()
             locationManager.delegate = nil
             
             let latitude = location.coordinate.latitude
             let longitude = location.coordinate.longitude
+            myLatitude = latitude
+            myLongitude = longitude
+            
             let placesParams: [String: String] = [
                 "query": locationType,
                 "location": "\(latitude),\(longitude)",
@@ -184,23 +194,7 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
                 }
                 let latitude = result["geometry"]["location"]["lat"].doubleValue
                 let longitude = result["geometry"]["location"]["lng"].doubleValue
-                
-                // local restaurant data exists
-                /*let rID = 0
-                firebaseRef.child("restaurants").child("\(rID)").observeSingleEvent(of: .value, with: { snapshot in
-                    if let value = snapshot.value as? NSDictionary {
-                        let name = value["name"] as! String
-                        print(name)
-                        //let menu = value["menu"] as! NSArray
-                        //print((menu[0] as! NSDictionary)["price"]!)
-                    }
-                    else {
-                        print("No data at this path")
-                    }
-                }) { error in
-                    print(error.localizedDescription)
-                }*/
-                
+            
                 print(locationType.lowercased())
                 let location = LocationInfo(
                     name: name,
@@ -213,12 +207,62 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
                 )
                 self.locationList.append(location)
             }
-            let tableVC = self.children.first as? TableViewController
-            tableVC?.locationList = Array((locationList.sorted {
+            
+            self.locationList = Array((locationList.sorted {
                 $0.rankValue > $1.rankValue
             }).prefix(selectNumber))
+            
+            let tableVC = self.children.first as? TableViewController
+            tableVC?.locationList = locationList
+            
+            for _ in 0..<selectNumber {
+                walkingInfoList.append(WalkingInfo())
+            }
+            
+            getDistances()
         }
     }
+    
+    fileprivate func getDistances() {
+        for (index, locationInfo) in locationList.enumerated() {
+            getDistance(
+                index: index,
+                targetLatitude: locationInfo.coordinate.latitude,
+                targetLongitude: locationInfo.coordinate.longitude
+            )
+        }
+    }
+    
+    fileprivate func getDistance(index: Int, targetLatitude: Double, targetLongitude: Double) {
+        let parameters = [
+            "units": "imperial",
+            "origins": "\(myLatitude!),\(myLongitude!)",
+            "destinations": "\(targetLatitude),\(targetLongitude)",
+            "mode": "walking",
+            "key": DistanceMatrixAPI.key
+        ]
+        Alamofire.request(DistanceMatrixAPI.url, method: .get, parameters: parameters).responseJSON {
+            (response) in
+            if response.result.isSuccess {
+                let walkingDataJSON: JSON = JSON(response.result.value!)
+                let row = walkingDataJSON["rows"].arrayValue[0]
+                let element = row["elements"].arrayValue[0]
+                let distance = element["distance"]["text"].stringValue
+                let duration = element["duration"]["text"].stringValue
+                self.walkingInfoList[index].distance = distance
+                self.walkingInfoList[index].time = duration
+                
+                let tableVC = self.children.first as? TableViewController
+                DispatchQueue.main.async {
+                    tableVC?.walkingInfoList = self.walkingInfoList
+                }
+            } else {
+                print("Failed to get distance info due to a connection issue:", response.result.error ?? "")
+            }
+        }
+    }
+    
+    
     //    MARK: - get weather from API
     fileprivate func getWeatherData(url: String, parameters: [String: String]) {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
@@ -244,12 +288,13 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
             """
             Hi \(Settings.userName), it's \(mealTime)!
             The weather in \(city) is \(description), and the tempeture is \(temperatureF)°F.
-            Here're some rocommendation for you:
+            Here're some recommendations for you:
             """
         } else {
             print("Weather unavailable")
         }
     }
+    
     //    MARK: - segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toLocDetail" {
@@ -262,6 +307,12 @@ class LocsController: UIViewController, CLLocationManagerDelegate {
 
 class TableViewController: UITableViewController {
     var locationList = [LocationInfo](){
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    var walkingInfoList = [WalkingInfo]() {
         didSet {
             tableView.reloadData()
         }
@@ -291,6 +342,7 @@ class TableViewController: UITableViewController {
         tableView.separatorColor = .darkGray
         tableView.separatorInset = .zero
     }
+    
     //    MARK: - tableView delegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return locationList.count
@@ -300,12 +352,23 @@ class TableViewController: UITableViewController {
         let cell = LocCell(style: .default, reuseIdentifier: nil)
         let loc = locationList[indexPath.row]
         cell.location = loc
+        if walkingInfoList.count == locationList.count {
+            let walkingInfo = walkingInfoList[indexPath.row]
+            if let distance = walkingInfo.distance,
+                let time = walkingInfo.time {
+                cell.descriptionLabel.text = "\(time) walk, (\(distance))"
+            } else {
+                cell.descriptionLabel.text = "distance info unavailable"
+            }
+        }
         return cell
     }
+    
     //    MARK: - segue
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         parent?.performSegue(withIdentifier: "toLocDetail", sender: indexPath)
     }
+    
     //    MARK: - footer for error display
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return footerLabel

@@ -37,10 +37,11 @@ class GoMapAppButton: UIButton {
         label.font = UIFont.boldSystemFont(ofSize: 15)
         return label
     }()
-//    MARK: - init, setupUI
+    //    MARK: - init, setupUI
     fileprivate func setupUI() {
         let stackView = UIStackView(arrangedSubviews: [decorationImage, textLabel, UIView(), arrowIcon])
-//        let tap gesture propogate to the button
+        
+        //        let tap gesture propogate to the button
         stackView.isUserInteractionEnabled = false
         addSubview(stackView)
         stackView.fillSuperView()

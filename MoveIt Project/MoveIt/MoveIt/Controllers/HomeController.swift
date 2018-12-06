@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import Firebase
 
 class HomeController: UIViewController {
     let goalBtn = BannerButton()
@@ -16,16 +17,24 @@ class HomeController: UIViewController {
     var weeklySteps = [Int]()
     var dailyStepsGoal: Int = 3000
     
+    var firebaseRef: DatabaseReference!
+    
     @IBOutlet weak var bannersContainer: UIView!
     @IBOutlet weak var rBtn: UIButton!
     @IBOutlet weak var gBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // fetch settings from Firebase
+        firebaseRef = Database.database().reference()
+        fetchSettings()
+        
         setupUI()
         // request access to HealthKit and get data from health app
         hkManager.authorizeHealthKit(to: self)
         hkManager.readHealthData(to: self)
+        
     }
     
     fileprivate func setupUI() {
@@ -56,6 +65,33 @@ class HomeController: UIViewController {
     
     @objc fileprivate func openGLocsView() {
         performSegue(withIdentifier: "toLocs", sender: gBtn)
+    }
+    
+    func fetchSettings() {
+        firebaseRef.child("settings").observeSingleEvent(of: .value, with: { snapshot in
+            if let value = snapshot.value as? [String: String] {
+                Settings.formData = value
+                
+                let periods = ["Breakfast", "Lunch", "Dinner"]
+                for period in periods {
+                    let time = Settings.formData[period + " hour"]! + ":" + Settings.formData[period + " minute"]!
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "HH:mm"
+                    guard let timeData = dateFormatter.date(from: time) else {
+                        fatalError()
+                    }
+                    Notification.scheduledtime(identifier: period, dateSet: timeData)
+                }
+                
+                mealRanking.LikeFoods = Settings.parseFoods(Settings.formData["favorite food"] ?? "").components(separatedBy: ", ")
+                mealRanking.DislikeFoods = Settings.parseFoods(Settings.formData["hated food"] ?? "").components(separatedBy: ", ")
+            }
+            else {
+                print("No settings")
+            }
+        }) { error in
+            print(error.localizedDescription)
+        }
     }
     
     // segue preparation
@@ -90,7 +126,7 @@ class HomeController: UIViewController {
         view.addSubview(stackView)
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
-//        stackView.spacing = 10
+        stackView.spacing = 10
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         NSLayoutConstraint.activate([

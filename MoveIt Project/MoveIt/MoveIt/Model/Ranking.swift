@@ -44,11 +44,14 @@ class restaurantRanking {
 
 class mealRanking {
     static let constraints: [String: [Int]] = [
-        "Carbohydrates": [0, 100],
-        "Sugars": [0, 30],
-        "Calories": [100, 800],
-        "Fats": [0, 30]
+        "carbohydrates": [0, 100],
+        "sugars": [0, 30],
+        "calories": [100, 800],
+        "fats": [0, 30]
     ]
+    
+    static var LikeFoods = [String]()
+    static var DislikeFoods = [String]()
     
     static let negativeKeyWords: [String] = ["pizza", "burger", "hotdog", "steak", "nachos", "pasta", "fry", "fried", "fries", "donut", "cake", "ice cream", "chocolate", "cream"]
     
@@ -61,6 +64,20 @@ class mealRanking {
         for (item, _) in constraints {
             if (nutrition[item] ?? 0) < constraints[item]![0] || (nutrition[item] ?? 0) > constraints[item]![1] {
                 rankValue -= 1
+            }
+        }
+        
+        for LikeFood in LikeFoods {
+            if name.contains(LikeFood) {
+                rankValue += 5
+                break
+            }
+        }
+        
+        for DislikeFood in DislikeFoods {
+            if name.contains(DislikeFood) {
+                rankValue -= 5
+                break
             }
         }
         

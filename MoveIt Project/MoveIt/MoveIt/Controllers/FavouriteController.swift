@@ -58,7 +58,6 @@ class FavouriteController: UIViewController {
     
     // MARK: - get place from API
     fileprivate func getPlaces() {
-//        TODO: download list of placeIds
         restaurants = []
         gardens = []
         firebaseRef.child("favourites").child("restaurants").observeSingleEvent(of: .value, with: { snapshot in
@@ -90,10 +89,6 @@ class FavouriteController: UIViewController {
         }) { error in
             print(error.localizedDescription)
         }
-//        downloadGroup.enter()
-        
-        
-//        downloadGroup.wait()
     }
     
     
@@ -154,7 +149,6 @@ class FavouriteController: UIViewController {
                     }
                     self.tableView?.reloadData()
                 }
-//            downloadGroup.leave()
         }
     }
 }
