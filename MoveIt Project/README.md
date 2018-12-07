@@ -1,6 +1,5 @@
 # MoveIt!
-<img src="./doc/img/AppIcon.png" align="middle">
-
+![logo](./doc/img/AppIcon.png)
 
 ## Getting Started
 
@@ -62,7 +61,7 @@ developers.
 Activity goals button: The two buttons at the top half of the homepage. The current daily activity goal progress can be previewed.
 
 ### Part 2: Activity Goals 
-<img src="./doc/img/activity.PNG"  width="300" height="540">
+<img src="./doc/img/activity.png"  width="300" height="540">
 
 This page consists of a pie chart and a line chart. The pie chart shows the percentage of days that the user achieves daily goal in a week, and the 
 line chart shows the step counts for the most recent 7 days. The red line on the line chart is the daily step goal set by the user. The default value 
@@ -108,7 +107,7 @@ After the user added some restaurants or gardens to the favorite list, he or she
 in this page. 
 
 ### Part 8: Settings Page
-<img src="./doc/img/settings.PNG"  width="300" height="540">
+<img src="./doc/img/settings.png"  width="300" height="540">
 
 The user could modify personal information, daily goals, and activity preferences in this page. Customizable field includes:
 
@@ -131,6 +130,31 @@ The user could modify personal information, daily goals, and activity preference
 `Breakfast`, `Lunch`, and `Dinner`: the notification time of meals
 
 <img src="./doc/img/notification.PNG"  width="300" height="540">
+
+## Database
+
+We use Google Firebase as the real-time database to store restaurant information, menu information, user's favorites and user's settings. You can use the file named `firebaseData.json` under the `Model` folder to initialize an empty Google Firebase database for testing.
+
+Data in Google Firebase's real-time database is stored as JSON. The structure of this app's database can be understood through the below example:
+
+<img src="./doc/img/database_structure.png"  width="600" height="540">
+
+There are 3 main directories: `restaurants`, `favourites` and `settings`.
+
+- `restaurants`
+
+This directory will store all restaurants' complete information. Each restaurant will be identified by its Google Places ID, which is a unique key.
+For each restaurant, currently we store its Google Places ID, name, address, phone number and its menu. The menu is an array that contains information of all available foods in the restaurant.
+
+- `favourites`
+
+This directory stores user's favorite restaurants and parks.There are 2 arrays for favorite restaurants and favorite parks respectively.
+We store only the Google Places ID in the arrays. To guarantee that users can get up-to-date information of their favorite restaurants and parks, we
+send requests to APIs to get complete information with the unique Google Places ID when loading the Favorite tab.
+
+- `settings`
+
+This directory stores all the information on the app's Settings tab. Everytime we launch the app, the app will automatically fetch the latest settings from Firebase to initialize user's settings.
 
 ## Appendix
 ### APIs
