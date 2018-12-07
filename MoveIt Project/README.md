@@ -61,7 +61,7 @@ developers.
 Activity goals button: The two buttons at the top half of the homepage. The current daily activity goal progress can be previewed.
 
 ### Part 2: Activity Goals 
-<img src="./doc/img/activity.png"  width="300" height="540">
+<img src="./doc/img/activity.PNG"  width="300" height="540">
 
 This page consists of a pie chart and a line chart. The pie chart shows the percentage of days that the user achieves daily goal in a week, and the 
 line chart shows the step counts for the most recent 7 days. The red line on the line chart is the daily step goal set by the user. The default value 
@@ -107,7 +107,7 @@ After the user added some restaurants or gardens to the favorite list, he or she
 in this page. 
 
 ### Part 8: Settings Page
-<img src="./doc/img/settings.png"  width="300" height="540">
+<img src="./doc/img/settings.PNG"  width="300" height="540">
 
 The user could modify personal information, daily goals, and activity preferences in this page. Customizable field includes:
 
