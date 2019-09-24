@@ -157,28 +157,20 @@ send requests to APIs to get complete information with the unique Google Places 
 This directory stores all the information on the app's Settings tab. Everytime we launch the app, the app will automatically fetch the latest settings from Firebase to initialize user's settings.
 
 ## Appendix
-### APIs
-**Note: These API keys belong to the development team. For future development or usage, please register and use your own API keys**
+### APIs used
 
 Google Place API
-- API Key: AIzaSyDzi0HPWH371bh1Y96mRNQQhIgroKkQqk4
 - Text Search requests
-  - URL: https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants&location=42.3675294,-71.186966&radius=10000&key=AIzaSyDzi0HPWH371bh1Y96mRNQQhIgroKkQqk4
   - Documentation: https://developers.google.com/places/web-service/search#TextSearchRequests
 
 Nutritionix API
 
-- APP id: b108d5e3
-- APP key: 00a801040a499040e91dc89b57d9a567
 
 OpenWeatherMap API
-- appid/API Key: 80a6764d399620f1658c8e4a660140df
 - Search by geographic coordinates
-  - URL: https://api.openweathermap.org/data/2.5/weather?lat=36&lon=-78.94&appid=80a6764d399620f1658c8e4a660140df
   - Documentation: https://openweathermap.org/current#geo
 
 Google Distance Matrix API
-- API Key: AIzaSyBfk8EDPBPW4xPImEJbs5v19QSopFM-oxg
 - Documentation: https://developers.google.com/maps/documentation/distance-matrix/intro
 
 ### Update History
